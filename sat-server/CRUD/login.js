@@ -5,7 +5,7 @@ const router = express.Router();
 // Agregar base de datos
 const db = require('../database/dbConfig');
 
-router.post("/users/login", async (req, res) => {
+router.post("/", async (req, res) => {
     const { username, password } = req.body;
   
     const q = 'SELECT * FROM users WHERE username = ? and password = ?'

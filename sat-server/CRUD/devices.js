@@ -6,7 +6,7 @@ const db = require('../database/dbConfig');
 /* ------------------------------------------------------------- */
 // CRUD de equipos
 // create
-router.post('/devices', async (req, res) => {
+router.post('/', async (req, res) => {
     const { brand, type, model } = req.body;
   
     let brandId;
@@ -63,7 +63,7 @@ router.post('/devices', async (req, res) => {
   
   })
   // read
-  router.get("/devices", (req, res) => {
+  router.get("/", (req, res) => {
     const qgetDevices = "SELECT * FROM devices JOIN types ON devices.type_id = types.typeid JOIN brands ON devices.brand_id = brands.brandid";
     db.query(qgetDevices, (err, data) => {
       if (err) {
@@ -74,7 +74,7 @@ router.post('/devices', async (req, res) => {
     });
   })
   // update
-  router.put("/devices/:id", (req, res) => {
+  router.put("/:id", (req, res) => {
     const { brand, type, model } = req.body;
   
     let brandId;
@@ -118,7 +118,7 @@ router.post('/devices', async (req, res) => {
     });
   })
   // delete
-  router.delete("/devices/:id", (req, res) => {
+  router.delete("/:id", (req, res) => {
     const deviceId = req.params.id;
     const qdeleteDevice = " DELETE FROM devices WHERE iddevices = ? ";
   

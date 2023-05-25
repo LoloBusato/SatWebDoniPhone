@@ -6,7 +6,7 @@ const db = require('../database/dbConfig');
 /* ------------------------------------------------------------- */
 // CRUD de marcas
 // create
-router.post('/brand', async (req, res) => {
+router.post('/', async (req, res) => {
     const { brand } = req.body;
   
     const qBrand = 'SELECT * FROM brands WHERE brand = ?'
@@ -30,7 +30,7 @@ router.post('/brand', async (req, res) => {
     }); 
   });
   // read
-  router.get("/brand", (req, res) => {
+  router.get("/", (req, res) => {
     const qgetBrands = "SELECT * FROM brands";
     db.query(qgetBrands, (err, data) => {
       if (err) {
@@ -41,7 +41,7 @@ router.post('/brand', async (req, res) => {
     });
   })
   // update
-  router.put("/brand/:id", (req, res) => {
+  router.put("/:id", (req, res) => {
     const brandId = req.params.id;
     const qupdateBrand = "UPDATE brands SET `brand`= ? WHERE brandid = ?";
   
@@ -55,7 +55,7 @@ router.post('/brand', async (req, res) => {
     });
   })
   // delete
-  router.delete("/brand/:id", (req, res) => {
+  router.delete("/:id", (req, res) => {
     const brandId = req.params.id;
     const qdeleteBrand = " DELETE FROM brands WHERE brandid = ? ";
   

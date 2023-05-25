@@ -6,7 +6,7 @@ const db = require('../database/dbConfig');
 /* ------------------------------------------------------------- */
 // CRUD de tipos
 // create
-router.post('/type', async (req, res) => {
+router.post('/', async (req, res) => {
     const { type } = req.body;
   
     const qType = 'SELECT * FROM types WHERE type = ?'
@@ -30,7 +30,7 @@ router.post('/type', async (req, res) => {
     });
   });
   // read
-  router.get("/type", (req, res) => {
+  router.get("/", (req, res) => {
     const qgetTypes = "SELECT * FROM types";
     db.query(qgetTypes, (err, data) => {
       if (err) {
@@ -41,7 +41,7 @@ router.post('/type', async (req, res) => {
     });
   })
   // update
-  router.put("/type/:id", (req, res) => {
+  router.put("/:id", (req, res) => {
     const typeId = req.params.id;
     const qupdateType = "UPDATE types SET `type`= ? WHERE typeid = ?";
   
@@ -53,7 +53,7 @@ router.post('/type', async (req, res) => {
     });
   })
   // delete
-  router.delete("/type/:id", (req, res) => {
+  router.delete("/:id", (req, res) => {
     const typeId = req.params.id;
     const qdeleteType = " DELETE FROM types WHERE typeid = ? ";
   

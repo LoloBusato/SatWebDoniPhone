@@ -5,7 +5,7 @@ const router = express.Router();
 const db = require('../database/dbConfig');
 // CRUD de usuarios
 // create
-router.post("/users", (req, res) => {
+router.post("/", (req, res) => {
   const { username, password } = req.body;
 
   const qexist = 'SELECT * FROM users WHERE username = ?'
@@ -31,7 +31,7 @@ router.post("/users", (req, res) => {
   });
 })
 // read
-router.get("/users", (req, res) => {
+router.get("/", (req, res) => {
   const qgetUsers = "SELECT * FROM users";
   db.query(qgetUsers, (err, data) => {
     if (err) {
@@ -42,7 +42,7 @@ router.get("/users", (req, res) => {
   });
 })
 // update
-router.put("/users/:id", (req, res) => {
+router.put("/:id", (req, res) => {
   const userId = req.params.id;
   const qupdateUser = "UPDATE users SET `username`= ?, `password`= ? WHERE idusers = ?";
 
@@ -57,7 +57,7 @@ router.put("/users/:id", (req, res) => {
   });
 })
 // delete
-router.delete("/users/:id", (req, res) => {
+router.delete("/:id", (req, res) => {
   const userId = req.params.id;
   const qdeleteUser = " DELETE FROM users WHERE idusers = ? ";
 
