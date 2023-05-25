@@ -6,7 +6,7 @@ const db = require('../database/dbConfig');
 /*-----------------CREACION DE SUCURSALES--------------- */
 // CRUD de sucursales
 // create
-router.post('/branches', async (req, res) => {
+router.post('/', async (req, res) => {
     const { branch, contact, info } = req.body;
   
     const values = [
@@ -36,7 +36,7 @@ router.post('/branches', async (req, res) => {
     });
   });
   // read
-router.get("/branches", (req, res) => {
+router.get("/", (req, res) => {
     const qgetBranches = "SELECT * FROM branches";
     db.query(qgetBranches, (err, data) => {
       if (err) {
@@ -47,7 +47,7 @@ router.get("/branches", (req, res) => {
     });
   })
   // update
-router.put("/branches/:id", (req, res) => {
+router.put("/:id", (req, res) => {
     const branchId = req.params.id;
     const qupdateBranch = "UPDATE branches SET `branch`= ?, `contact`= ?, `info`= ? WHERE idbranches = ?";
   
@@ -65,7 +65,7 @@ router.put("/branches/:id", (req, res) => {
     });
   })
 // delete
-router.delete("/branches/:id", (req, res) => {
+router.delete("/:id", (req, res) => {
     const branchId = req.params.id;
     const qdeleteBranch = " DELETE FROM branches WHERE idbranches = ? ";
   

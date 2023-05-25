@@ -6,7 +6,7 @@ const db = require('../database/dbConfig');
 /*-----------------CREACION DE CLIENTES--------------- */
 // CRUD de clientes
 // create
-router.post('/clients', async (req, res) => {
+router.post('/', async (req, res) => {
     const { name, surname, email, instagram, phone, postal } = req.body;
   
     const values = [
@@ -50,7 +50,7 @@ router.post('/clients', async (req, res) => {
     });
   });
   // read
-  router.get("/clients", (req, res) => {
+  router.get("/", (req, res) => {
     const qgetClients = "SELECT * FROM clients";
     db.query(qgetClients, (err, data) => {
       if (err) {
@@ -61,7 +61,7 @@ router.post('/clients', async (req, res) => {
     });
   })
   // update
-  router.put("/clients/:id", (req, res) => {
+  router.put("/:id", (req, res) => {
     const clientId = req.params.id;
     const { name, surname, email, instagram, phone, postal } = req.body;
   
@@ -101,7 +101,7 @@ router.post('/clients', async (req, res) => {
     });
   })
   // delete
-  router.delete("/clients/:id", (req, res) => {
+  router.delete("/:id", (req, res) => {
     const clientId = req.params.id;
     const qdeleteClient = " DELETE FROM clients WHERE idclients = ? ";
   

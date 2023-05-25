@@ -5,7 +5,7 @@ const router = express.Router();
 const db = require('../database/dbConfig');
 // CRUD de estados
 // create
-router.post('/states', async (req, res) => {
+router.post('/', async (req, res) => {
     const { state, color } = req.body;
   
     const qState = 'SELECT * FROM states WHERE state = ?'
@@ -29,7 +29,7 @@ router.post('/states', async (req, res) => {
     }); 
   });
   // read
-  router.get("/states", (req, res) => {
+  router.get("/", (req, res) => {
     const qgetStates = "SELECT * FROM states";
     db.query(qgetStates, (err, data) => {
       if (err) {
@@ -40,7 +40,7 @@ router.post('/states', async (req, res) => {
     });
   })
   // update
-  router.put("/states/:id", (req, res) => {
+  router.put("/:id", (req, res) => {
     const stateId = req.params.id;
     const qupdateState = "UPDATE states SET `state`= ?, `color` = ? WHERE idstates = ?";
   
@@ -55,7 +55,7 @@ router.post('/states', async (req, res) => {
     });
   })
   // delete
-  router.delete("/states/:id", (req, res) => {
+  router.delete("/:id", (req, res) => {
     const stateId = req.params.id;
     const qdeleteState = " DELETE FROM states WHERE idstates = ? ";
   

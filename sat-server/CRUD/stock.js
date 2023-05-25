@@ -16,7 +16,7 @@ Proveedor => creacion de sistema de proveedores
 Fecha de ingreso => default | new Date()
 */
 // create
-router.post("/stock", (req, res) => {
+router.post("/", (req, res) => {
     const { repuesto_id, cantidad, precio_compra, proveedor_id } = req.body;
     let fecha_compra = req.body.fecha_compra
     const qCreateStock = "INSERT INTO stock (repuesto_id, cantidad, precio_compra, proveedor_id, fecha_compra) VALUES (?, ?, ?, ?, ?)";
@@ -46,7 +46,7 @@ router.post("/stock", (req, res) => {
     });    
   })
   // read
-  router.get("/stock", (req, res) => {
+  router.get("/", (req, res) => {
     const qgetStock = "SELECT * FROM stock JOIN repuestos ON stock.repuesto_id = repuestos.idrepuestos JOIN proveedores ON stock.proveedor_id = proveedores.idproveedores";
     db.query(qgetStock, (err, data) => {
       if (err) {
@@ -57,7 +57,7 @@ router.post("/stock", (req, res) => {
     });
   })
   // update
-  router.put("/stock/:id", (req, res) => {
+  router.put("/:id", (req, res) => {
     const stockId = req.params.id;
     const qupdateStock = "UPDATE stock SET `repuesto_id` = ?, `cantidad` = ?, `precio_compra` = ?, `proveedor_id` = ?, `fecha_compra` = ? WHERE idstock = ?";
     const { repuesto_id, cantidad, precio_compra, proveedor_id } = req.body;
@@ -85,7 +85,7 @@ router.post("/stock", (req, res) => {
     });
   })
   // delete
-  router.delete("/stock/:id", (req, res) => {
+  router.delete("/:id", (req, res) => {
     const stockId = req.params.id;
     const qdeleteStock = " DELETE FROM stock WHERE idstock = ? ";
   

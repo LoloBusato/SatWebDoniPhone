@@ -6,7 +6,7 @@ const db = require('../database/dbConfig');
 /*-----------------CREACION DE CATEGORIAS--------------- */
 // CRUD de categorias
 // create
-router.post('/movcategories', async (req, res) => {
+router.post('/', async (req, res) => {
     const { categories } = req.body;
   
     const qCategories = 'SELECT * FROM movcategories WHERE categories = ?'
@@ -31,7 +31,7 @@ router.post('/movcategories', async (req, res) => {
     });
   });
   // read
-  router.get("/movcategories", (req, res) => {
+  router.get("/", (req, res) => {
     const qgetCategoriest = "SELECT * FROM movcategories";
     db.query(qgetCategoriest, (err, data) => {
       if (err) {
@@ -42,7 +42,7 @@ router.post('/movcategories', async (req, res) => {
     });
   })
   // update
-  router.put("/account/:id", (req, res) => {
+  router.put("/:id", (req, res) => {
     const categoriesId = req.params.id;
     const { categories } = req.body;
   
@@ -64,7 +64,7 @@ router.post('/movcategories', async (req, res) => {
     });
   })
   // delete
-  router.delete("/account/:id", (req, res) => {
+  router.delete("/:id", (req, res) => {
     const categoriesId = req.params.id;
     const qdeleteCategories = " DELETE FROM movcategories WHERE idmovcategories = ? ";
   

@@ -5,7 +5,7 @@ const router = express.Router();
 const db = require('../database/dbConfig');
 /*-----------------CREACION DE ORDENES DE TRABAJO--------------- */
 // create
-router.post("/orders", (req, res) => {
+router.post("/", (req, res) => {
   const { accesorios, branches_id, client_id, device_id, device_color, password, problem, serial, state_id, users_id } = req.body;
 
   const fechaActual = new Date();
@@ -39,7 +39,7 @@ router.post("/orders", (req, res) => {
   });  
 })
 // read
-router.get("/orders", (req, res) => {
+router.get("/", (req, res) => {
   const qgetOrders = "SELECT idclients, branches.contact, branches.info, idusers, device_color, idbranches, idstates, iddevices, order_id, created_at, returned_at, problem, orders.password, accesorios, serial, name, surname, email, postal, instagram, phone, model, brand, type, branch, state, color, username FROM satweb.orders INNER JOIN satweb.clients ON satweb.orders.client_id = satweb.clients.idclients INNER JOIN satweb.devices ON satweb.orders.device_id = satweb.devices.iddevices JOIN satweb.brands ON satweb.devices.brand_id = satweb.brands.brandid JOIN satweb.types ON satweb.devices.type_id = satweb.types.typeid INNER JOIN satweb.branches ON satweb.orders.branches_id = satweb.branches.idbranches INNER JOIN satweb.states ON satweb.orders.state_id = satweb.states.idstates INNER JOIN satweb.users ON satweb.orders.users_id = satweb.users.idusers";
   db.query(qgetOrders, (err, data) => {
     if (err) {
@@ -50,7 +50,7 @@ router.get("/orders", (req, res) => {
   });
 })
 // update
-router.put("/orders/:id", (req, res) => {
+router.put("/:id", (req, res) => {
   const orderId = req.params.id;
 
   const { accesorios, branches_id, device_id, password, problem, serial, state_id, users_id } = req.body;
@@ -76,7 +76,7 @@ router.put("/orders/:id", (req, res) => {
   });
 })
 // delete
-router.delete("/orders/:id", (req, res) => {
+router.delete("/:id", (req, res) => {
   const orderId = req.params.id;
   const qdeleteOrder = " DELETE FROM orders WHERE order_id = ? ";
 

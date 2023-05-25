@@ -6,7 +6,7 @@ const db = require('../database/dbConfig');
 /*-----------------CREACION DE MENSAJES--------------- */
 // CRUD de mensajes
 // create
-router.post('/orders/messages/', async (req, res) => {
+router.post('/', async (req, res) => {
     const { user_id, message, orderId } = req.body;
   
     const fechaActual = new Date();
@@ -35,7 +35,7 @@ router.post('/orders/messages/', async (req, res) => {
     });    
   });
   // read
-  router.get("/orders/messages/:id", (req, res) => {
+  router.get("/:id", (req, res) => {
     const orderId = req.params.id;
     const qgetNotes = "SELECT * FROM messages JOIN users ON messages.user_id = users.idusers WHERE orderId = ?";
     db.query(qgetNotes, [orderId], (err, data) => {
@@ -48,7 +48,7 @@ router.post('/orders/messages/', async (req, res) => {
   })
   // update
   // delete
-  router.delete("/orders/messages/:id", (req, res) => {
+  router.delete("/:id", (req, res) => {
     const messageId = req.params.id;
     const qdeleteOrder = " DELETE FROM messages WHERE idmessages = ? ";
   

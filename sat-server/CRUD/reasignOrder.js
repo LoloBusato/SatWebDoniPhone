@@ -4,7 +4,7 @@ const router = express.Router();
 // Agregar base de datos
 const db = require('../database/dbConfig');
 // update
-router.put("/reasignOrder/:id", (req, res) => {
+router.put("/:id", (req, res) => {
     const orderId = req.params.id;
   
     const { state_id, users_id } = req.body;

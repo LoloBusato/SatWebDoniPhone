@@ -5,7 +5,7 @@ const router = express.Router();
 const db = require('../database/dbConfig');
 /*-----------------CREACION DE SISTEMA DE PROVEEDORES----------------- */
 // create
-router.post("/supplier", (req, res) => {
+router.post("/", (req, res) => {
     const { nombre, telefono, direccion } = req.body;
     const values = [
       nombre,
@@ -24,7 +24,7 @@ router.post("/supplier", (req, res) => {
     });    
   })
   // read
-  router.get("/supplier", (req, res) => {
+  router.get("/", (req, res) => {
     const qgetSupplier = `SELECT * FROM proveedores LIMIT 20`;
     db.query(qgetSupplier, (err, result) => {
       if (err) {
@@ -36,7 +36,7 @@ router.post("/supplier", (req, res) => {
     });
   })
   // update
-  router.put("/supplier/:id", (req, res) => {
+  router.put("/:id", (req, res) => {
     const supplierId = req.params.id;
     const qupdateSupplier = "UPDATE proveedores SET `nombre` = ?, `telefono` = ?, `direccion` = ? WHERE idproveedores = ?";
     const { nombre, telefono, direccion } = req.body;
@@ -52,7 +52,7 @@ router.post("/supplier", (req, res) => {
     });
   })
   // delete
-  router.delete("/supplier/:id", (req, res) => {
+  router.delete("/:id", (req, res) => {
     const supplierId = req.params.id;
     const qdeleteSupplier = " DELETE FROM proveedores WHERE idproveedores = ? ";
   
@@ -61,7 +61,7 @@ router.post("/supplier", (req, res) => {
       return res.status(200).json(data);
     });
   })
-  router.get('/supplier/:nombre', (req, res) => {
+  router.get('/:nombre', (req, res) => {
   
     const nombre = req.params.nombre;
     const sql = `SELECT idproveedores FROM proveedores WHERE nombre = ?`;

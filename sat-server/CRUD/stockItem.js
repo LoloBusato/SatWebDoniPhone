@@ -5,7 +5,7 @@ const router = express.Router();
 const db = require('../database/dbConfig');
 /*-----------------CREACION DE SISTEMA DE REPUESTOS----------------- */
 // create
-router.post("/stock/item", (req, res) => {
+router.post("/", (req, res) => {
     const { repuesto } = req.body;
     const qCreateItem = "INSERT INTO repuestos (repuesto) VALUES (?)";
     db.query(qCreateItem, [repuesto], (err, data) => {
@@ -17,7 +17,7 @@ router.post("/stock/item", (req, res) => {
     });    
   })
   // read
-  router.get("/stock/item", (req, res) => {
+  router.get("/", (req, res) => {
     const qgetItem = "SELECT * FROM repuestos LIMIT 50";
     db.query(qgetItem, (err, result) => {
       if (err) {
@@ -29,7 +29,7 @@ router.post("/stock/item", (req, res) => {
     });
   })
   // update
-  router.put("/stock/item/:id", (req, res) => {
+  router.put("/:id", (req, res) => {
     const itemId = req.params.id;
     const qupdateItem = "UPDATE repuestos SET `repuesto` = ? WHERE idrepuestos = ?";
     const { repuesto } = req.body;
@@ -40,7 +40,7 @@ router.post("/stock/item", (req, res) => {
     });
   })
   // delete
-  router.delete("/stock/item/:id", (req, res) => {
+  router.delete("/:id", (req, res) => {
     const itemId = req.params.id;
     const qdeleteItem = " DELETE FROM repuestos WHERE idrepuestos = ? ";
   
@@ -49,7 +49,7 @@ router.post("/stock/item", (req, res) => {
       return res.status(200).json(data);
     });
   })
-  router.get('/stock/item/:nombre', (req, res) => {
+  router.get('/:nombre', (req, res) => {
   
     const nombre = req.params.nombre;
     const sql = `SELECT idrepuestos FROM repuestos WHERE repuesto = ?`;

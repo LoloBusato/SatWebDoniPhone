@@ -6,7 +6,7 @@ const db = require('../database/dbConfig');
 /*-----------------CREACION DE MOVIMIENTOS--------------- */
 // CRUD de movimientos
 // create
-router.post('/movements', async (req, res) => {
+router.post('/', async (req, res) => {
     const { accountId, movCategoriesId, userId, movement, valueUsd, valuePesos, valueTrans, valueMp } = req.body;
 
     const fechaActual = new Date();
@@ -37,7 +37,7 @@ router.post('/movements', async (req, res) => {
     });    
   });
   // read
-  router.get("/movements", (req, res) => {
+  router.get("/", (req, res) => {
     const qgetMovements = "SELECT * FROM movements";
     db.query(qgetMovements, (err, data) => {
       if (err) {
@@ -48,7 +48,7 @@ router.post('/movements', async (req, res) => {
     });
   })
   // update
-  router.put("/movements/:id", (req, res) => {
+  router.put("/:id", (req, res) => {
     const moveId = req.params.id;
     const { accountId, movCategoriesId, userId, movement, valueUsd, valuePesos, valueTrans, valueMp } = req.body;
   
@@ -62,7 +62,7 @@ router.post('/movements', async (req, res) => {
     }); 
   })
   // delete
-  router.delete("/movements/:id", (req, res) => {
+  router.delete("/:id", (req, res) => {
     const moveId = req.params.id;
     const qdeleteMovement = " DELETE FROM movements WHERE idmovements = ? ";
   

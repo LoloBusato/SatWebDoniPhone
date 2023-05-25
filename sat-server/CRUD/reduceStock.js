@@ -4,7 +4,7 @@ const router = express.Router();
 // Agregar base de datos
 const db = require('../database/dbConfig');
 /*-----------------CREACION DE SISTEMA DE REPUESTOS USADOS----------------- */
-router.post("/reduceStock", (req, res) => {
+router.post("/", (req, res) => {
     const qInsertReduceStock = "INSERT INTO reducestock (orderid, userid, stockid, date) VALUES (?, ?, ?, ?)";
     const qupdateStock = "UPDATE stock SET `cantidad` = ? WHERE idstock = ?";
   
@@ -38,7 +38,7 @@ router.post("/reduceStock", (req, res) => {
     });
   
   })// read
-  router.get("/reduceStock", (req, res) => {
+  router.get("/", (req, res) => {
     const qgetStock = "SELECT idreducestock, idstock, cantidad, repuesto, precio_compra, nombre, username, reducestock.date  FROM reducestock JOIN users ON reducestock.userid = users.idusers JOIN stock ON reducestock.stockid = stock.idstock JOIN repuestos ON stock.repuesto_id = repuestos.idrepuestos JOIN proveedores ON stock.proveedor_id = proveedores.idproveedores;";
     db.query(qgetStock, (err, data) => {
       if (err) {
@@ -48,7 +48,7 @@ router.post("/reduceStock", (req, res) => {
       return res.status(200).json(data);
     });
   })
-  router.put("/reduceStock/:id", (req, res) => {
+  router.put("/:id", (req, res) => {
     const qupdateStock = "UPDATE stock SET `cantidad` = ? WHERE idstock = ?";
     const stockId = req.params.id;
     const { cantidad } = req.body;
@@ -58,7 +58,7 @@ router.post("/reduceStock", (req, res) => {
       return res.status(200).json(data);
     });
   })
-  router.delete("/reduceStock/:id", (req, res) => {
+  router.delete("/:id", (req, res) => {
     const stockReduceId = req.params.id;
     const qdeleteStock = " DELETE FROM reducestock WHERE idreducestock = ? ";
   

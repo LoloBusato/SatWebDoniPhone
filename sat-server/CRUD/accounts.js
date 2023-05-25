@@ -7,7 +7,7 @@ const db = require('../database/dbConfig');
 /*-----------------CREACION DE CUENTAS--------------- */
 // CRUD de cuentas
 // create
-router.post('/account', async (req, res) => {
+router.post('/', async (req, res) => {
     const { account } = req.body;
 
     const cajaBranch = `Caja${account}`
@@ -39,7 +39,7 @@ router.post('/account', async (req, res) => {
     });
   });
   // read
-  router.get("/account", (req, res) => {
+  router.get("/", (req, res) => {
     const qgetAccount = "SELECT * FROM accounts";
     db.query(qgetAccount, (err, data) => {
       if (err) {
@@ -50,7 +50,7 @@ router.post('/account', async (req, res) => {
     });
   })
   // update
-  router.put("/account/:id", (req, res) => {
+  router.put("/:id", (req, res) => {
     const accountId = req.params.id;
     const { account } = req.body;
   
@@ -72,7 +72,7 @@ router.post('/account', async (req, res) => {
     });
   })
   // delete
-  router.delete("/account/:id", (req, res) => {
+  router.delete("/:id", (req, res) => {
     const accountId = req.params.id;
     const qdeleteAccount = " DELETE FROM accounts WHERE idaccount = ? ";
   
