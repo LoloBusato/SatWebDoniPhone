@@ -6,12 +6,16 @@ import MainNavBar from '../orders/MainNavBar';
 function MovesSells() {
     const [payCategories, setPayCategories] = useState([])
     const [sellStock, setSellStock] = useState([])
-    const categoria = "Venta"
-    const [catId, setCatId] = useState("")
+    const catVenta = "Venta"
+    const catCaja = "Caja"
+    const [catVentaId, setCatVentaId] = useState("")
+    const [catCajaId, setCatCajaId] = useState("")
 
     const [clients, setClients] = useState([])
     const [nombre, setNombre] = useState('')
     const [apellido, setApellido] = useState('')
+
+    const [dolar, setDolar] = useState(500)
 
     const navigate = useNavigate();
 
@@ -51,9 +55,25 @@ function MovesSells() {
                     console.error(error)
                 })
 
-            await axios.get(`http://localhost:3001/movcategories/${categoria}`)
+            await axios.get(`http://localhost:3001/movcategories/${catVenta}`)
                 .then(response => {
-                    setCatId(response.data.idmovcategories)
+                    setCatVentaId(response.data.idmovcategories)
+                })
+                .catch(error => {
+                    console.error(error)
+                })
+
+            await axios.get(`http://localhost:3001/movcategories/${catCaja}`)
+                .then(response => {
+                    setCatCajaId(response.data.idmovcategories)
+                })
+                .catch(error => {
+                    console.error(error)
+                })
+
+            await axios.get(`https://api.bluelytics.com.ar/v2/latest`)
+                .then(response => {
+                    setDolar(response.data.blue.value_sell)
                 })
                 .catch(error => {
                     console.error(error)
@@ -89,23 +109,31 @@ function MovesSells() {
                 } 
             }
             const cuentaVuelto = parseInt(document.getElementById("cuenta").value)
-            const device = parseInt(document.getElementById("device").value)
+            const device = JSON.parse(document.getElementById("device").value)
+
+            const valueUsd = parseInt(formData.get('clienteUSD'))
+            const valuePesos = parseInt(formData.get('clientePesos'))
+            const valueTrans = parseInt(formData.get('clienteBanco'))
+            const valueMp = parseInt(formData.get('clienteMercadopago'))
+            const vueltoUsd = parseInt(formData.get('cajaUSD'))
+            const vueltoPesos = parseInt(formData.get('cajaPesos'))
+            const vueltoTrans = parseInt(formData.get('cajaBanco'))
+            const vueltoMp = parseFloat(formData.get('cajaMercadopago'))
+
+            const montoUSD = valueUsd - vueltoUsd
+            const montoPesos = valuePesos + valueTrans + valueMp - vueltoPesos - vueltoTrans - vueltoMp
+            const montoTotal = montoPesos + (montoUSD * dolar)
+
+            console.log(catCajaId, clientId, montoTotal, device.repuesto, userId)
+
             const movData = {
-                movCategoriesId: catId,
+                // movCategoriesId: catVentaId,
                 userId,
                 movement: clientId,
-                device,
-                valueUsd: formData.get('clienteUSD'),
-                valuePesos: formData.get('clientePesos'),
-                valueTrans: formData.get('clienteBanco'),
-                valueMp: formData.get('clienteMercadopago'),
+                // device,
                 cuentaVuelto,
-                vueltoUsd: formData.get('cajaUSD'),
-                vueltoPesos: formData.get('cajaPesos'),
-                vueltoTrans: formData.get('cajaBanco'),
-                vueltoMp: formData.get('cajaMercadopago'),
+                costs: device.precio_compra,
             };
-            console.log(movData)
             //const response = await axios.post('http://localhost:3001/movements', movData);
             //if (response.status === 200){
             //alert("Gasto agregado")
@@ -224,7 +252,7 @@ function MovesSells() {
                                 <select name="device" id="device" defaultValue={""} className='w-full shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' >
                                     <option value="" disabled>Equipo</option>
                                     {sellStock.map((device) => (
-                                        <option key={device.idstock} value={device.idstock}>{device.repuesto} {device.nombre} {device.precio_compra}</option>
+                                        <option key={device.idstock} value={JSON.stringify(device)}>{device.repuesto} {device.nombre} {device.precio_compra}</option>
                                     ))}
                                 </select>
                             </div>
@@ -237,7 +265,9 @@ function MovesSells() {
                                             <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Pesos:</label>
                                             <input 
                                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                                                type="text" 
+                                                type="number"
+                                                step="0.01" 
+                                                defaultValue="0"
                                                 id="clientePesos" 
                                                 name='clientePesos'
                                             />
@@ -246,7 +276,9 @@ function MovesSells() {
                                             <label className="block text-gray-700 font-bold mb-2" htmlFor="name">USD:</label>
                                             <input 
                                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                                                type="text" 
+                                                type="number"
+                                                step="0.01" 
+                                                defaultValue="0"
                                                 id="clienteUSD" 
                                                 name='clienteUSD'
                                             />
@@ -255,7 +287,9 @@ function MovesSells() {
                                             <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Banco:</label>
                                             <input 
                                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                                                type="text" 
+                                                type="number"
+                                                step="0.01" 
+                                                defaultValue="0"
                                                 id="clienteBanco" 
                                                 name='clienteBanco'
                                             />
@@ -264,7 +298,9 @@ function MovesSells() {
                                             <label className="block text-gray-700 font-bold mb-2" htmlFor="name">MercadoPago:</label>
                                             <input 
                                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                                                type="text" 
+                                                type="number"
+                                                step="0.01" 
+                                                defaultValue="0"
                                                 id="clienteMercadopago" 
                                                 name='clienteMercadopago'
                                             />
@@ -290,7 +326,9 @@ function MovesSells() {
                                             <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Pesos:</label>
                                             <input 
                                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                                                type="text" 
+                                                type="number"
+                                                step="0.01" 
+                                                defaultValue="0"
                                                 id="cajaPesos" 
                                                 name='cajaPesos'
                                             />
@@ -299,7 +337,9 @@ function MovesSells() {
                                             <label className="block text-gray-700 font-bold mb-2" htmlFor="name">USD:</label>
                                             <input 
                                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                                                type="text" 
+                                                type="number"
+                                                step="0.01" 
+                                                defaultValue="0"
                                                 id="cajaUSD" 
                                                 name='cajaUSD'
                                             />
@@ -308,7 +348,9 @@ function MovesSells() {
                                             <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Banco:</label>
                                             <input 
                                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                                                type="text" 
+                                                type="number"
+                                                step="0.01" 
+                                                defaultValue="0"
                                                 id="cajaBanco" 
                                                 name='cajaBanco'
                                             />
@@ -317,7 +359,9 @@ function MovesSells() {
                                             <label className="block text-gray-700 font-bold mb-2" htmlFor="name">MercadoPago:</label>
                                             <input 
                                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                                                type="text" 
+                                                type="number"
+                                                step="0.01" 
+                                                defaultValue="0"
                                                 id="cajaMercadopago" 
                                                 name='cajaMercadopago'
                                             />
