@@ -6,10 +6,14 @@ import MainNavBar from '../orders/MainNavBar';
 function MovesSells() {
     const [payCategories, setPayCategories] = useState([])
     const [sellStock, setSellStock] = useState([])
-    const catVenta = "Venta"
-    const catCaja = "Caja"
-    const [catVentaId, setCatVentaId] = useState("")
-    const [catCajaId, setCatCajaId] = useState("")
+    const [ventaId, setVentaId] = useState(0)
+    const [cmvId, setcmvId] = useState(0)
+    const [repuestosId, setRepuestosId] = useState(0)
+    const [cajaId, setCajaId] = useState(0)
+    const [pesosId, setPesosId] = useState(0)
+    const [usdId, setusdId] = useState(0)
+    const [mpId, setmpId] = useState(0)
+    const [bancoId, setBancoId] = useState(0)
 
     const [clients, setClients] = useState([])
     const [nombre, setNombre] = useState('')
@@ -26,7 +30,24 @@ function MovesSells() {
                     for (let i = 0; i < response.data.length; i++) {
                         if (response.data[i].tipo.includes("Pagar")) {
                             setPayCategories(prevArray => [...prevArray, response.data[i]])
-                        }                    
+                        }
+                        if(response.data[i].categories === "Venta") {
+                            setVentaId(response.data[i].idmovcategories)
+                        } else if(response.data[i].categories === "CMV") {
+                            setcmvId(response.data[i].idmovcategories)
+                        } else if(response.data[i].categories === "Repuestoa") {
+                            setRepuestosId(response.data[i].idmovcategories)
+                        } else if(response.data[i].categories === "Caja") {
+                            setCajaId(response.data[i].idmovcategories)
+                        } else if(response.data[i].categories === "Pesos") {
+                            setPesosId(response.data[i].idmovcategories)
+                        } else if(response.data[i].categories === "Dolares") {
+                            setusdId(response.data[i].idmovcategories)
+                        } else if(response.data[i].categories === "MercadoPago") {
+                            setmpId(response.data[i].idmovcategories)
+                        } else if(response.data[i].categories === "Banco") {
+                            setBancoId(response.data[i].idmovcategories)
+                        } 
                     }
                 })
                 .catch(error => {
@@ -50,22 +71,6 @@ function MovesSells() {
             await axios.get('http://localhost:3001/clients')
                 .then(response => {
                     setClients(response.data)
-                })
-                .catch(error => {
-                    console.error(error)
-                })
-
-            await axios.get(`http://localhost:3001/movcategories/${catVenta}`)
-                .then(response => {
-                    setCatVentaId(response.data.idmovcategories)
-                })
-                .catch(error => {
-                    console.error(error)
-                })
-
-            await axios.get(`http://localhost:3001/movcategories/${catCaja}`)
-                .then(response => {
-                    setCatCajaId(response.data.idmovcategories)
                 })
                 .catch(error => {
                     console.error(error)
