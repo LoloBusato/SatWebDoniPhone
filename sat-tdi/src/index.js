@@ -40,6 +40,7 @@ import Statistics from './routes/statistics/Statistics';
 import UpdateUser from './routes/login/UpdateUser';
 import PrintOrder from './routes/orders/PrintOrder';
 import Movements from './routes/finances/movements';
+import MovesSells from './routes/finances/movesSells';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -98,7 +99,9 @@ const router = createBrowserRouter(
         <Route path= '/statistics' element= {<Statistics /> } /> 
 
         {/* Rutas para gastos */}
-        <Route path= '/movements' element= {<Movements /> } /> 
+        <Route path= '/movements' element= {<Movements /> } />
+        <Route path= '/movessells' element= {<MovesSells /> } /> 
+
 
       </Route>
       <Route path='/login' element={<Login />} />
