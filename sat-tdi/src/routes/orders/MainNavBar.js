@@ -59,6 +59,7 @@ const MainNavBar = () => {
                         </ul>
                     </li>
                     <Link to="/statistics" className="text-white font-bold text-lg hover:text-gray-300 px-4 border-r-2 w-full" ><li>Estadisticas</li></Link>
+                    <Link to="/movements" className="text-white font-bold text-lg hover:text-gray-300 px-4 border-r-2 w-full" ><li>Gastos</li></Link>
                     <li className="relative text-white font-bold text-lg hover:text-gray-300 px-4 border-r-2 w-full"
                         onMouseEnter={() => handleMouseEnter("config")}
                         onMouseLeave={() => handleMouseLeave("config")}
