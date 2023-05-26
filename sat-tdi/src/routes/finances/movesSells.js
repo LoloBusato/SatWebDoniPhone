@@ -91,6 +91,7 @@ function MovesSells() {
         event.preventDefault();
         // Aquí es donde enviarías la información de inicio de sesión al servidor
         let clientId = "";
+        const libroArr = [];
         try {
             const userId = JSON.parse(localStorage.getItem("userId"))
 
@@ -120,30 +121,54 @@ function MovesSells() {
             const valuePesos = parseInt(formData.get('clientePesos'))
             const valueTrans = parseInt(formData.get('clienteBanco'))
             const valueMp = parseInt(formData.get('clienteMercadopago'))
-            const vueltoUsd = parseInt(formData.get('cajaUSD'))
-            const vueltoPesos = parseInt(formData.get('cajaPesos'))
-            const vueltoTrans = parseInt(formData.get('cajaBanco'))
-            const vueltoMp = parseFloat(formData.get('cajaMercadopago'))
+            const vueltoUsd = -parseInt(formData.get('cajaUSD'))
+            const vueltoPesos = -parseInt(formData.get('cajaPesos'))
+            const vueltoTrans = -parseInt(formData.get('cajaBanco'))
+            const vueltoMp = -parseFloat(formData.get('cajaMercadopago'))
+            
+            const dolarArr = [valueUsd, vueltoUsd]
+            const pesosArr = [valuePesos, valueTrans, valueMp, vueltoPesos, vueltoTrans, vueltoMp]
 
-            const montoUSD = valueUsd - vueltoUsd
-            const montoPesos = valuePesos + valueTrans + valueMp - vueltoPesos - vueltoTrans - vueltoMp
+            const montoUSD = dolarArr.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+            const montoPesos = pesosArr.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
             const montoTotal = montoPesos + (montoUSD * dolar)
 
-            console.log(catCajaId, clientId, montoTotal, device.repuesto, userId)
+            // movname
+            console.log(cajaId, clientId, montoTotal, device.repuesto, userId)
 
-            const movData = {
-                // movCategoriesId: catVentaId,
-                userId,
-                movement: clientId,
-                // device,
-                cuentaVuelto,
-                costs: device.precio_compra,
-            };
-            //const response = await axios.post('http://localhost:3001/movements', movData);
-            //if (response.status === 200){
-            //alert("Gasto agregado")
-            //window.location.reload();
-            //}
+            //libro
+            if (valueUsd !== 0){
+                console.log(movNameId, usdId, valueUsd)
+            }
+            if (valueTrans !== 0){
+                console.log(movNameId, bancoId, valueTrans)
+            }
+            if (valuePesos !== 0){
+                console.log(movNameId, pesosId, valuePesos)
+            }
+            if (valueMp !== 0){
+                console.log(movNameId, mpId, valueMp)
+            }
+            console.log(movNameId, ventaId, montoTotal)
+            console.log(movNameId, cmvId, parseFloat(device.precio_compra))
+            console.log(movNameId, repuestosId, -parseFloat(device.precio_compra))
+            if (cuentaVuelto === cajaId) {
+                if (vueltoUsd !== 0){
+                    console.log(movNameId, usdId, vueltoUsd)
+                }
+                if (vueltoTrans !== 0){
+                    console.log(movNameId, bancoId, vueltoTrans)
+                }
+                if (vueltoPesos !== 0){
+                    console.log(movNameId, pesosId, vueltoPesos)
+                }
+                if (vueltoMp !== 0){
+                    console.log(movNameId, mpId, vueltoMp)
+                }
+            } else {
+                const vuelto = (vueltoUsd * dolar) + vueltoTrans + vueltoPesos + vueltoMp
+                console.log(movNameId, cuentaVuelto, vuelto)
+            }
         } catch (error) {
             alert(error.response.data);
         }
