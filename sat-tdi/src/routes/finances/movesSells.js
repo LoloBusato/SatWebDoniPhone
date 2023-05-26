@@ -67,6 +67,8 @@ function MovesSells() {
         // Aquí es donde enviarías la información de inicio de sesión al servidor
         let clientId = "";
         try {
+            const userId = JSON.parse(localStorage.getItem("userId"))
+
             const formData = new FormData(event.target);
             const clientData = {
                 name: formData.get('name').trim(),
@@ -86,21 +88,24 @@ function MovesSells() {
                     clientId = responseClient.data[0].idclients
                 } 
             }
-            console.log(catId)
-
-            const movCategoriesId = document.getElementById("category").value
-            const user_id = JSON.parse(localStorage.getItem("userId"))
-
+            const cuentaVuelto = parseInt(document.getElementById("cuenta").value)
+            const device = parseInt(document.getElementById("device").value)
             const movData = {
-            movCategoriesId: movCategoriesId,
-            userId: user_id,
-            movement: formData.get('gasto'),
-            valueUsd: formData.get('USD'),
-            valuePesos: formData.get('pesos'),
-            valueTrans: formData.get('banco'),
-            valueMp: formData.get('mercadopago'),
+                movCategoriesId: catId,
+                userId,
+                movement: clientId,
+                device,
+                valueUsd: formData.get('clienteUSD'),
+                valuePesos: formData.get('clientePesos'),
+                valueTrans: formData.get('clienteBanco'),
+                valueMp: formData.get('clienteMercadopago'),
+                cuentaVuelto,
+                vueltoUsd: formData.get('cajaUSD'),
+                vueltoPesos: formData.get('cajaPesos'),
+                vueltoTrans: formData.get('cajaBanco'),
+                vueltoMp: formData.get('cajaMercadopago'),
             };
-
+            console.log(movData)
             //const response = await axios.post('http://localhost:3001/movements', movData);
             //if (response.status === 200){
             //alert("Gasto agregado")
@@ -213,17 +218,18 @@ function MovesSells() {
                                         placeholder="1427"
                                     />
                             </div>
+                            {/* Equipo */}
                             <div className='mb-1 p-2 bg-blue-100'>
                                 <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Equipo: *</label>
-                                <select name="category" id="category" className='w-full shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' >
-                                    <option value="" disabled selected>Equipo</option>
+                                <select name="device" id="device" defaultValue={""} className='w-full shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' >
+                                    <option value="" disabled>Equipo</option>
                                     {sellStock.map((device) => (
-                                        <option key={device.idstock} value={device.repuesto}>{device.repuesto}</option>
+                                        <option key={device.idstock} value={device.idstock}>{device.repuesto} {device.nombre} {device.precio_compra}</option>
                                     ))}
                                 </select>
                             </div>
+                            {/* Valores Cliente */}
                             <div className='flex items-end bg-blue-100 mb-1 p-2'>
-                                {/* Valores */}
                                 <div className='w-full text-center'>
                                     <label className="block text-gray-700 font-bold mb-2 border-b-2">Pago *</label>
                                     <div className='flex'>
@@ -266,11 +272,12 @@ function MovesSells() {
                                     </div>
                                 </div>
                             </div>
+                            {/* Valores Vuelto */}
                             <div className='flex items-end bg-blue-100 mb-1 p-2'>
                                 <div className='w-1/2'>
                                     <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Cuenta: *</label>
-                                    <select name="category" id="category" className='w-full shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' >
-                                        <option value="" disabled selected>Cuenta</option>
+                                    <select name="cuenta" id="cuenta" defaultValue={""} className='w-full shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' >
+                                        <option value="" disabled >Cuenta</option>
                                         {payCategories.map((category) => (
                                             <option key={category.idmovcategories} value={category.idmovcategories}>{category.categories}</option>
                                         ))}
