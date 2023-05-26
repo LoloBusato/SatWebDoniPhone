@@ -6,6 +6,8 @@ import MainNavBar from '../orders/MainNavBar';
 function MovesSells() {
     const [payCategories, setPayCategories] = useState([])
     const [sellStock, setSellStock] = useState([])
+    const categoria = "Venta"
+    const [catId, setCatId] = useState("")
 
     const [clients, setClients] = useState([])
     const [nombre, setNombre] = useState('')
@@ -48,6 +50,14 @@ function MovesSells() {
                 .catch(error => {
                     console.error(error)
                 })
+
+            await axios.get(`http://localhost:3001/movcategories/${categoria}`)
+                .then(response => {
+                    setCatId(response.data.idmovcategories)
+                })
+                .catch(error => {
+                    console.error(error)
+                })
         }
         fetchStates()
     }, []);
@@ -76,7 +86,7 @@ function MovesSells() {
                     clientId = responseClient.data[0].idclients
                 } 
             }
-            console.log(clientId)
+            console.log(catId)
 
             const movCategoriesId = document.getElementById("category").value
             const user_id = JSON.parse(localStorage.getItem("userId"))

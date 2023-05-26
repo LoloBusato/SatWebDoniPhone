@@ -43,14 +43,14 @@ router.post('/', async (req, res) => {
   })
   router.get("/:nombre", (req, res) => {
     const qgetCatId = "SELECT idmovcategories FROM movcategories WHERE categories = ? ";
-    const catId = req.params.id;
+    const catName = req.params.nombre;
 
-    db.query(qgetCatId, [catId], (err, data) => {
+    db.query(qgetCatId, [catName], (err, data) => {
       if (err) {
         console.log(err);
         return res.status(400).json(err);
       }
-      return res.status(200).json(data);
+      return res.status(200).json(data[0]);
     });
   })
   // update
