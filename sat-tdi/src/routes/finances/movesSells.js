@@ -91,11 +91,11 @@ function MovesSells() {
             valueMp: formData.get('mercadopago'),
             };
 
-            const response = await axios.post('http://localhost:3001/movements', movData);
-            if (response.status === 200){
-            alert("Gasto agregado")
-            window.location.reload();
-            }
+            //const response = await axios.post('http://localhost:3001/movements', movData);
+            //if (response.status === 200){
+            //alert("Gasto agregado")
+            //window.location.reload();
+            //}
         } catch (error) {
             alert(error.response.data);
         }
@@ -114,24 +114,14 @@ function MovesSells() {
     return (
         <div className='bg-gray-300 min-h-screen pb-2'>
             <MainNavBar />
-            <div className='bg-white my-2 py-8 px-2 max-w-7xl mx-auto'>
+            <div className='bg-white my-2 py-8 px-2 max-w-4xl mx-auto'>
                 <h1 className="text-center text-5xl">Ventas</h1>
                 {/* Ventas */}
-                <div className="p-4 max-w-6xl mx-auto">
+                <div className="p-4 max-w-3xl mx-auto">
                     <form onSubmit={handleSubmit} className="mb-4">
                         <div className="mb-2">
-                            <div className='flex items-end'>
-                                <div className='w-1/2'>
-                                    <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Equipo: *</label>
-                                    <select name="category" id="category" className='w-full shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' >
-                                        <option value="" disabled selected>Equipo</option>
-                                        {sellStock.map((device) => (
-                                            <option key={device.idstock} value={device.repuesto}>{device.repuesto}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                                {/* Cliente */}
-                                <div className="mb-1 p-2">
+                            {/* Cliente */}
+                            <div className="mb-1 p-2 bg-blue-100">
                                     <label>Cliente</label>
                                     <div className='flex'>
                                         <div className='w-full'>
@@ -212,18 +202,28 @@ function MovesSells() {
                                         name="postal" 
                                         placeholder="1427"
                                     />
-                                </div>
+                            </div>
+                            <div className='mb-1 p-2 bg-blue-100'>
+                                <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Equipo: *</label>
+                                <select name="category" id="category" className='w-full shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' >
+                                    <option value="" disabled selected>Equipo</option>
+                                    {sellStock.map((device) => (
+                                        <option key={device.idstock} value={device.repuesto}>{device.repuesto}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className='flex items-end bg-blue-100 mb-1 p-2'>
                                 {/* Valores */}
                                 <div className='w-full text-center'>
-                                    <label className="block text-gray-700 font-bold mb-2 border-b-2">Monto *</label>
+                                    <label className="block text-gray-700 font-bold mb-2 border-b-2">Pago *</label>
                                     <div className='flex'>
                                         <div className='w-full'>
                                             <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Pesos:</label>
                                             <input 
                                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
                                                 type="text" 
-                                                id="pesos" 
-                                                name='pesos'
+                                                id="clientePesos" 
+                                                name='clientePesos'
                                             />
                                         </div>     
                                         <div className='w-full'>
@@ -231,8 +231,8 @@ function MovesSells() {
                                             <input 
                                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
                                                 type="text" 
-                                                id="USD" 
-                                                name='USD'
+                                                id="clienteUSD" 
+                                                name='clienteUSD'
                                             />
                                         </div>    
                                         <div className='w-full'>
@@ -240,8 +240,8 @@ function MovesSells() {
                                             <input 
                                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
                                                 type="text" 
-                                                id="banco" 
-                                                name='banco'
+                                                id="clienteBanco" 
+                                                name='clienteBanco'
                                             />
                                         </div>
                                         <div className='w-full'>
@@ -249,14 +249,14 @@ function MovesSells() {
                                             <input 
                                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
                                                 type="text" 
-                                                id="mercadopago" 
-                                                name='mercadopago'
+                                                id="clienteMercadopago" 
+                                                name='clienteMercadopago'
                                             />
                                         </div>                                
                                     </div>
                                 </div>
                             </div>
-                            <div className='flex items-end'>
+                            <div className='flex items-end bg-blue-100 mb-1 p-2'>
                                 <div className='w-1/2'>
                                     <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Cuenta: *</label>
                                     <select name="category" id="category" className='w-full shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' >
@@ -274,8 +274,8 @@ function MovesSells() {
                                             <input 
                                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
                                                 type="text" 
-                                                id="pesos" 
-                                                name='pesos'
+                                                id="cajaPesos" 
+                                                name='cajaPesos'
                                             />
                                         </div>     
                                         <div className='w-full'>
@@ -283,8 +283,8 @@ function MovesSells() {
                                             <input 
                                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
                                                 type="text" 
-                                                id="USD" 
-                                                name='USD'
+                                                id="cajaUSD" 
+                                                name='cajaUSD'
                                             />
                                         </div>    
                                         <div className='w-full'>
@@ -292,8 +292,8 @@ function MovesSells() {
                                             <input 
                                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
                                                 type="text" 
-                                                id="banco" 
-                                                name='banco'
+                                                id="cajaBanco" 
+                                                name='cajaBanco'
                                             />
                                         </div>
                                         <div className='w-full'>
@@ -301,8 +301,8 @@ function MovesSells() {
                                             <input 
                                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
                                                 type="text" 
-                                                id="mercadopago" 
-                                                name='mercadopago'
+                                                id="cajaMercadopago" 
+                                                name='cajaMercadopago'
                                             />
                                         </div>                                
                                     </div>
