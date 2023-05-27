@@ -7,27 +7,16 @@ const db = require('../database/dbConfig');
 // CRUD de movimientos
 // create
 router.post('/', async (req, res) => {
-    const { movCategoriesId, userId, movement, valueUsd, valuePesos, valueTrans, valueMp } = req.body;
-
-    const fechaActual = new Date();
-    const anio = (fechaActual.getFullYear()).toString().slice(-2);
-    const mes = ('0' + (fechaActual.getMonth() + 1)).slice(-2);
-    const dia = ('0' + fechaActual.getDate()).slice(-2);
-    const fecha = `${dia}/${mes}/${anio}`;
+    const { movCategoriesId, unidades, movnameId } = req.body;
 
     const values = [
         movCategoriesId,
-        userId,
-        movement,
-        valueUsd, 
-        valuePesos,
-        valueTrans, 
-        valueMp,
-        fecha
+        unidades,
+        movnameId
     ]
   
-    const qCreateMove= "INSERT INTO movements (account_id, movcategories_id, user_id, movement, value_usd, value_pesos, value_trans, value_mp, fecha) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    db.query(qCreateCategory, values, (err, result) => {
+    const qCreateMove= "INSERT INTO movements (movcategories_id, unidades, movname_id) VALUES (?, ?, ?)";
+    db.query(qCreateMove, values, (err, data) => {
         if (err) {
         console.log("error: ", err);
         return res.status(400).send("No se pudo agregar el movimiento.");

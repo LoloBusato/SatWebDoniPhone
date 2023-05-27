@@ -7,7 +7,7 @@ const db = require('../database/dbConfig');
 // CRUD de movname
 // create
 router.post('/', async (req, res) => {
-    const { ingreso, egreso, monto, operacion, userId } = req.body;
+    const { ingreso, egreso, operacion, monto, userId } = req.body;
 
     const fechaActual = new Date();
     const anio = (fechaActual.getFullYear()).toString().slice(-2);
@@ -30,7 +30,7 @@ router.post('/', async (req, res) => {
         console.log("error: ", err);
         return res.status(400).send("No se pudo agregar el movimiento.");
         }
-        return res.status(200).send(data);
+        return res.status(200).send(result);
     });    
   });
   // read

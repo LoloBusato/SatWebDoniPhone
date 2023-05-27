@@ -35,7 +35,7 @@ function MovesSells() {
                             setVentaId(response.data[i].idmovcategories)
                         } else if(response.data[i].categories === "CMV") {
                             setcmvId(response.data[i].idmovcategories)
-                        } else if(response.data[i].categories === "Repuestoa") {
+                        } else if(response.data[i].categories === "Repuestos") {
                             setRepuestosId(response.data[i].idmovcategories)
                         } else if(response.data[i].categories === "Caja") {
                             setCajaId(response.data[i].idmovcategories)
@@ -90,8 +90,7 @@ function MovesSells() {
     async function handleSubmit(event) {
         event.preventDefault();
         // Aquí es donde enviarías la información de inicio de sesión al servidor
-        let clientId = "";
-        const libroArr = [];
+        let client = "";
         try {
             const userId = JSON.parse(localStorage.getItem("userId"))
 
@@ -111,7 +110,7 @@ function MovesSells() {
             } else{
                 const responseClient = await axios.post('http://localhost:3001/clients', clientData);
                 if (responseClient.status === 200){
-                    clientId = responseClient.data[0].idclients
+                    client = `${responseClient.data[0].name} ${responseClient.data[0].surname}`
                 } 
             }
             const cuentaVuelto = parseInt(document.getElementById("cuenta").value)
@@ -134,41 +133,52 @@ function MovesSells() {
             const montoTotal = montoPesos + (montoUSD * dolar)
 
             // movname
-            console.log(cajaId, clientId, montoTotal, device.repuesto, userId)
-
-            //libro
-            if (valueUsd !== 0){
-                console.log(movNameId, usdId, valueUsd)
-            }
-            if (valueTrans !== 0){
-                console.log(movNameId, bancoId, valueTrans)
-            }
-            if (valuePesos !== 0){
-                console.log(movNameId, pesosId, valuePesos)
-            }
-            if (valueMp !== 0){
-                console.log(movNameId, mpId, valueMp)
-            }
-            console.log(movNameId, ventaId, montoTotal)
-            console.log(movNameId, cmvId, parseFloat(device.precio_compra))
-            console.log(movNameId, repuestosId, -parseFloat(device.precio_compra))
-            if (cuentaVuelto === cajaId) {
-                if (vueltoUsd !== 0){
-                    console.log(movNameId, usdId, vueltoUsd)
-                }
-                if (vueltoTrans !== 0){
-                    console.log(movNameId, bancoId, vueltoTrans)
-                }
-                if (vueltoPesos !== 0){
-                    console.log(movNameId, pesosId, vueltoPesos)
-                }
-                if (vueltoMp !== 0){
-                    console.log(movNameId, mpId, vueltoMp)
-                }
-            } else {
-                const vuelto = (vueltoUsd * dolar) + vueltoTrans + vueltoPesos + vueltoMp
-                console.log(movNameId, cuentaVuelto, vuelto)
-            }
+            await axios.post('http://localhost:3001/movname', {
+                ingreso: "Caja", 
+                egreso: "Venta", 
+                operacion: `${device.repuesto} - ${client}`, 
+                monto: montoTotal,
+                userId
+            })
+                .then(response => {
+                    const movNameId = response.data.insertId
+                    //libro
+                    if (valueUsd !== 0){
+                        console.log(movNameId, usdId, valueUsd)
+                    }
+                    if (valueTrans !== 0){
+                        console.log(movNameId, bancoId, valueTrans)
+                    }
+                    if (valuePesos !== 0){
+                        console.log(movNameId, pesosId, valuePesos)
+                    }
+                    if (valueMp !== 0){
+                        console.log(movNameId, mpId, valueMp)
+                    }
+                    console.log(movNameId, ventaId, -montoTotal)
+                    console.log(movNameId, cmvId, parseFloat(device.precio_compra))
+                    console.log(movNameId, repuestosId, -parseFloat(device.precio_compra))
+                    if (cuentaVuelto === cajaId) {
+                        if (vueltoUsd !== 0){
+                            console.log(movNameId, usdId, vueltoUsd)
+                        }
+                        if (vueltoTrans !== 0){
+                            console.log(movNameId, bancoId, vueltoTrans)
+                        }
+                        if (vueltoPesos !== 0){
+                            console.log(movNameId, pesosId, vueltoPesos)
+                        }
+                        if (vueltoMp !== 0){
+                            console.log(movNameId, mpId, vueltoMp)
+                        }
+                    } else {
+                        const vuelto = (vueltoUsd * dolar) + vueltoTrans + vueltoPesos + vueltoMp
+                        console.log(movNameId, cuentaVuelto, vuelto)
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
         } catch (error) {
             alert(error.response.data);
         }
