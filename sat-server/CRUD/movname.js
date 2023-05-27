@@ -7,7 +7,7 @@ const db = require('../database/dbConfig');
 // CRUD de movname
 // create
 router.post('/', async (req, res) => {
-    const { cajaId, ventaId, montoTotal, operacion, userId } = req.body;
+    const { ingreso, egreso, monto, operacion, userId } = req.body;
 
     const fechaActual = new Date();
     const anio = (fechaActual.getFullYear()).toString().slice(-2);
@@ -16,10 +16,10 @@ router.post('/', async (req, res) => {
     const fecha = `${dia}/${mes}/${anio}`;
 
     const values = [
-        cajaId, 
-        ventaId, 
+        ingreso, 
+        egreso, 
         operacion, 
-        montoTotal, 
+        monto, 
         fecha,
         userId
     ]
