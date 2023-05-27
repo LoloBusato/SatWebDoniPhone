@@ -31,6 +31,7 @@ const statesRoutes = require('./CRUD/states');
 const accountRoutes = require('./CRUD/accounts');
 const categoriesRoutes = require('./CRUD/categories');
 const movementsRoutes = require('./CRUD/movements');
+const movnameRoutes = require('./CRUD/movname');
 
 // Usar rutas CRUD
 app.use('/users/login', loginRoutes);
@@ -54,6 +55,8 @@ app.use('/states', statesRoutes);
 app.use('/account', accountRoutes);
 app.use('/movcategories', categoriesRoutes);
 app.use('/movements', movementsRoutes);
+app.use('/movname', movnameRoutes);
+
 
 // Agregar puerto de escucha
 const port = process.env.PORT || 3001;
