@@ -144,72 +144,72 @@ function MovesSells() {
                     const movNameId = response.data.insertId
                     //libro
                     if (valueUsd !== 0){
-                        const valueUsdResponse = axios.post('http://localhost:3001/movements', {
+                        axios.post('http://localhost:3001/movements', {
                             movCategoriesId: usdId,
                             unidades: valueUsd,
                             movnameId: movNameId
                         })
                     }
                     if (valueTrans !== 0){
-                        const valueBancoResponse = axios.post('http://localhost:3001/movements', {
+                        axios.post('http://localhost:3001/movements', {
                             movCategoriesId: bancoId,
                             unidades: valueTrans,
                             movnameId: movNameId
                         })
                     }
                     if (valuePesos !== 0){
-                        const valuePesosResponse = axios.post('http://localhost:3001/movements', {
+                        axios.post('http://localhost:3001/movements', {
                             movCategoriesId: pesosId,
                             unidades: valuePesos,
                             movnameId: movNameId
                         })
                     }
                     if (valueMp !== 0){
-                        const valueMPResponse = axios.post('http://localhost:3001/movements', {
+                        axios.post('http://localhost:3001/movements', {
                             movCategoriesId: mpId,
                             unidades: valueMp,
                             movnameId: movNameId
                         })
                     }
-                    const ventaResponse = axios.post('http://localhost:3001/movements', {
+                    axios.post('http://localhost:3001/movements', {
                         movCategoriesId: ventaId,
                         unidades: -montoTotal,
                         movnameId: movNameId
                     })
-                    const cmvResponse = axios.post('http://localhost:3001/movements', {
+                    axios.post('http://localhost:3001/movements', {
                         movCategoriesId: cmvId,
                         unidades: parseFloat(device.precio_compra),
                         movnameId: movNameId
                     })
-                    const repuestoResponse = axios.post('http://localhost:3001/movements', {
+                    axios.post('http://localhost:3001/movements', {
                         movCategoriesId: repuestosId,
                         unidades: -parseFloat(device.precio_compra),
                         movnameId: movNameId
                     })
                     if (cuentaVuelto === cajaId) {
                         if (vueltoUsd !== 0){
-                            const vueltousdResponse = axios.post('http://localhost:3001/movements', {
+                            axios.post('http://localhost:3001/movements', {
                                 movCategoriesId: usdId,
                                 unidades: vueltoUsd,
                                 movnameId: movNameId
                             })
                         }
                         if (vueltoTrans !== 0){
-                            const vueltobancoResponse = axios.post('http://localhost:3001/movements', {
+                            axios.post('http://localhost:3001/movements', {
                                 movCategoriesId: bancoId,
                                 unidades: vueltoTrans,
                                 movnameId: movNameId
                             })
                         }
                         if (vueltoPesos !== 0){
-                            const vueltopesosResponse = axios.post('http://localhost:3001/movements', {
+                            axios.post('http://localhost:3001/movements', {
                                 movCategoriesId: pesosId,
                                 unidades: vueltoPesos,
                                 movnameId: movNameId
                             })
                         }
                         if (vueltoMp !== 0){
-                            const vueltopesosResponse = axios.post('http://localhost:3001/movements', {
+                            axios.post('http://localhost:3001/movements', {
                                 movCategoriesId: mpId,
                                 unidades: vueltoMp,
                                 movnameId: movNameId
@@ -217,7 +217,7 @@ function MovesSells() {
                         }
                     } else {
                         const vuelto = (vueltoUsd * dolar) + vueltoTrans + vueltoPesos + vueltoMp
-                        const vueltoResponse = axios.post('http://localhost:3001/movements', {
+                        axios.post('http://localhost:3001/movements', {
                             movCategoriesId: cuentaVuelto,
                             unidades: vuelto,
                             movnameId: movNameId
@@ -227,6 +227,8 @@ function MovesSells() {
                 .catch(error => {
                     console.error(error);
                 });
+                alert("Venta agregada")
+                window.location.reload();
         } catch (error) {
             alert(error.response.data);
         }
