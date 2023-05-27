@@ -3,11 +3,11 @@ const router = express.Router();
 
 // Agregar base de datos
 const db = require('../database/dbConfig');
-/*-----------------CREACION DE MOVIMIENTOS--------------- */
-// CRUD de movimientos
+/*-----------------CREACION DE MOVNAME--------------- */
+// CRUD de movname
 // create
 router.post('/', async (req, res) => {
-    const { movCategoriesId, userId, movement, valueUsd, valuePesos, valueTrans, valueMp } = req.body;
+    const { cajaId, ventaId, montoTotal, operacion, userId } = req.body;
 
     const fechaActual = new Date();
     const anio = (fechaActual.getFullYear()).toString().slice(-2);
@@ -16,18 +16,16 @@ router.post('/', async (req, res) => {
     const fecha = `${dia}/${mes}/${anio}`;
 
     const values = [
-        movCategoriesId,
-        userId,
-        movement,
-        valueUsd, 
-        valuePesos,
-        valueTrans, 
-        valueMp,
-        fecha
+        cajaId, 
+        ventaId, 
+        operacion, 
+        montoTotal, 
+        fecha,
+        userId
     ]
   
-    const qCreateMove= "INSERT INTO movements (account_id, movcategories_id, user_id, movement, value_usd, value_pesos, value_trans, value_mp, fecha) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    db.query(qCreateCategory, values, (err, result) => {
+    const qCreateMove= "INSERT INTO movname (ingreso, egreso, operacion, monto, fecha, userId) VALUES (?, ?, ?, ?, ?, ?)";
+    db.query(qCreateMove, values, (err, result) => {
         if (err) {
         console.log("error: ", err);
         return res.status(400).send("No se pudo agregar el movimiento.");
