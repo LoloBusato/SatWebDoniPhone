@@ -77,45 +77,50 @@ function MovesOthers() {
 
             const arrayMovements = []
 
-            const branchValue = document.getElementById("branch").value
+            const gasto = formData.get('gasto')
+
+            const otherValue = document.getElementById("other").value
             const accountValue = document.getElementById("account").value
 
             if(montoTotal === 0){
-                return alert("ingresar montos")
-            } else if(branchValue === "" || accountValue === ""){
+                return alert("Ingresar montos")
+            } else if(otherValue === "" || accountValue === ""){
                 return alert("Seleccionar cajas")
+            } else if(gasto.trim() === ""){
+                return alert("Ingresar el nombre del gasto")
             }
 
-            const branch = JSON.parse(branchValue)
+            const other = JSON.parse(otherValue)
             const account = JSON.parse(accountValue)
+
 
             // movname
             await axios.post('http://localhost:3001/movname', {
-                ingreso: account.categories, 
-                egreso: branch.categories, 
-                operacion: `Pago Sucursal`, 
+                ingreso: other.categories, 
+                egreso: account.categories, 
+                operacion: gasto, 
                 monto: montoTotal,
                 userId
             })
                 .then(response => {
                     const movNameId = response.data.insertId
-                    arrayMovements.push([branch.idmovcategories, -montoTotal, movNameId])
+                    arrayMovements.push([other.idmovcategories, montoTotal, movNameId])
                     //libro
                     if(cajaId === account.idmovcategories) {
                         if (valueUsd !== 0){
-                            arrayMovements.push([usdId, valueUsd, movNameId])
+                            arrayMovements.push([usdId, -valueUsd, movNameId])
                         }
                         if (valueTrans !== 0){
-                            arrayMovements.push([bancoId, valueTrans, movNameId])
+                            arrayMovements.push([bancoId, -valueTrans, movNameId])
                         }
                         if (valuePesos !== 0){
-                            arrayMovements.push([pesosId, valuePesos, movNameId])
+                            arrayMovements.push([pesosId, -valuePesos, movNameId])
                         }
                         if (valueMp !== 0){
-                            arrayMovements.push([mpId, valueMp, movNameId])
+                            arrayMovements.push([mpId, -valueMp, movNameId])
                         }
                     } else {
-                        arrayMovements.push([account.idmovcategories, montoTotal, movNameId])
+                        arrayMovements.push([account.idmovcategories, -montoTotal, movNameId])
                     }
                 })
                 .catch(error => {
@@ -161,7 +166,7 @@ function MovesOthers() {
                                 </div>
                                 <div className='w-full'>
                                     <label className="block text-gray-700 font-bold mb-2">Categoria: *</label>
-                                    <select name="branch" id="branch" defaultValue={""} className='w-full shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' >
+                                    <select name="other" id="other" defaultValue={""} className='w-full shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' >
                                         <option value="" disabled>Categoria</option>
                                         {otherCategories.map((category) => (
                                             <option key={category.idmovcategories} value={JSON.stringify(category)}>{category.categories}</option>
@@ -175,6 +180,7 @@ function MovesOthers() {
                                         type="text"
                                         id="gasto" 
                                         name='gasto'
+                                        defaultValue=""
                                     />
                                 </div>  
                             </div>
