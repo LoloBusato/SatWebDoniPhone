@@ -4,10 +4,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import MainNavBar from '../orders/MainNavBar';
 
 function Movements() {
-    const [otherCategories, setOtherCategories] = useState([])
     const [payCategories, setPayCategories] = useState([])
     const [stockCategories, setStockCategories] = useState([])
-    const [branchCategories, setBranchCategories] = useState([])
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -15,18 +13,12 @@ function Movements() {
             await axios.get('http://localhost:3001/movcategories')
                 .then(response => {
                     for (let i = 0; i < response.data.length; i++) {
-                        if (response.data[i].tipo.includes("Otros")) {
-                            setOtherCategories(prevArray => [...prevArray, response.data[i]])
-                        }
                         if (response.data[i].tipo.includes("Pagar")) {
                             setPayCategories(prevArray => [...prevArray, response.data[i]])
                         }
                         if (response.data[i].tipo.includes("Repuestos")) {
                             setStockCategories(prevArray => [...prevArray, response.data[i]])
-                        }
-                        if (response.data[i].tipo.includes("Sucursal")) {
-                            setBranchCategories(prevArray => [...prevArray, response.data[i]])
-                        }                        
+                        }                     
                     }
                 })
                 .catch(error => {
@@ -70,98 +62,6 @@ function Movements() {
             <MainNavBar />
             <div className='bg-white my-2 py-8 px-2 max-w-7xl mx-auto'>
                 <h1 className="text-center text-5xl">Gastos</h1>
-                {/* Otros */}
-                <div className="p-4 max-w-6xl mx-auto">
-                    <form onSubmit={handleSubmit} className="mb-4">
-                        <label>Varios</label>
-                        <div className="mb-2">
-                            <div className='flex items-end'>
-                                <div className='w-1/2'>
-                                    <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Categoria: *</label>
-                                    <select name="category" id="category" className='w-full shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' >
-                                        <option value="" disabled selected>Quien puso la mosca</option>
-                                        {payCategories.map((category) => (
-                                            <option key={category.idmovcategories} value={category.idmovcategories}>{category.categories}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div className='w-1/2'>
-                                    <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Categoria: *</label>
-                                    <select name="category" id="category" className='w-full shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' >
-                                        <option value="" disabled selected>En que</option>
-                                        {otherCategories.map((category) => (
-                                            <option key={category.idmovcategories} value={category.idmovcategories}>{category.categories}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div className='w-full px-2'>
-                                    <label className="block text-gray-700 font-bold mb-2">Gasto: *</label>
-                                    <input 
-                                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                                        type="text" 
-                                        id="gasto" 
-                                        name='gasto'
-                                        placeholder="Baterias iPhone X"
-                                    />
-                                </div>
-                                {/* Valores */}
-                                <div className='w-full text-center'>
-                                    <label className="block text-gray-700 font-bold mb-2 border-b-2">Monto *</label>
-                                    <div className='flex'>
-                                        <div className='w-full'>
-                                            <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Pesos:</label>
-                                            <input 
-                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                                                type="text" 
-                                                id="pesos" 
-                                                name='pesos'
-                                            />
-                                        </div>     
-                                        <div className='w-full'>
-                                            <label className="block text-gray-700 font-bold mb-2" htmlFor="name">USD:</label>
-                                            <input 
-                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                                                type="text" 
-                                                id="USD" 
-                                                name='USD'
-                                            />
-                                        </div>    
-                                        <div className='w-full'>
-                                            <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Banco:</label>
-                                            <input 
-                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                                                type="text" 
-                                                id="banco" 
-                                                name='banco'
-                                            />
-                                        </div>
-                                        <div className='w-full'>
-                                            <label className="block text-gray-700 font-bold mb-2" htmlFor="name">MercadoPago:</label>
-                                            <input 
-                                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                                                type="text" 
-                                                id="mercadopago" 
-                                                name='mercadopago'
-                                            />
-                                        </div>                                
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                            Guardar
-                        </button>
-                        <button 
-                            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                            onClick={() => { navigate(`/home`) }} >
-                                Volver
-                        </button>
-                    </form>
-                </div>
-                {/* Ventas */}
-                <div className="p-4 max-w-6xl mx-auto">
-                    <Link to='/movessells'><h1>VENTAS</h1></Link>
-                </div>
                 {/* Reparaciones */}
                 <div className="p-4 max-w-6xl mx-auto">
                     <form onSubmit={handleSubmit} className="mb-4">
@@ -342,6 +242,14 @@ function Movements() {
                                 Volver
                         </button>
                     </form>
+                </div>
+                {/* Otros */}
+                <div className="p-4 max-w-6xl mx-auto">
+                    <Link to='/movesothers'><h1>OTROS</h1></Link>
+                </div>
+                {/* Ventas */}
+                <div className="p-4 max-w-6xl mx-auto">
+                    <Link to='/movessells'><h1>VENTAS</h1></Link>
                 </div>
                 {/* Sucursales */}
                 <div className="p-4 max-w-6xl mx-auto">
