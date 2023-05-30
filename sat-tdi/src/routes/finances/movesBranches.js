@@ -77,8 +77,17 @@ function MovesBranches() {
 
             const arrayMovements = []
 
-            const branch = JSON.parse(document.getElementById("branch").value)
-            const account = JSON.parse(document.getElementById("account").value)
+            const branchValue = document.getElementById("branch").value
+            const accountValue = document.getElementById("account").value
+
+            if(montoTotal === 0){
+                return alert("ingresar montos")
+            } else if(branchValue === "" || accountValue === ""){
+                return alert("Seleccionar cajas")
+            }
+
+            const branch = JSON.parse(branchValue)
+            const account = JSON.parse(accountValue)
 
             // movname
             await axios.post('http://localhost:3001/movname', {
