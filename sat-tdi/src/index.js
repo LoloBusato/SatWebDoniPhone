@@ -42,6 +42,7 @@ import PrintOrder from './routes/orders/PrintOrder';
 import Movements from './routes/finances/movements';
 import MovesSells from './routes/finances/movesSells';
 import MovesBranches from './routes/finances/movesBranches';
+import MovesOthers from './routes/finances/movesOthers';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -103,7 +104,7 @@ const router = createBrowserRouter(
         <Route path= '/movements' element= {<Movements /> } />
         <Route path= '/movessells' element= {<MovesSells /> } /> 
         <Route path= '/movesbranches' element= {<MovesBranches /> } /> 
-
+        <Route path= '/movesothers' element= {<MovesOthers /> } /> 
 
       </Route>
       <Route path='/login' element={<Login />} />
