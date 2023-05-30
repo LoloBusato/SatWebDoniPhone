@@ -5,6 +5,7 @@ import MainNavBar from '../orders/MainNavBar';
 
 function MovesBranches() {
     const [branchCategories, setBranchCategories] = useState([])
+    const [payCategories, setPayCategories] = useState([])
     const [cajaId, setCajaId] = useState(0)
     const [pesosId, setPesosId] = useState(0)
     const [usdId, setusdId] = useState(0)
@@ -22,6 +23,9 @@ function MovesBranches() {
                     for (let i = 0; i < response.data.length; i++) {
                         if (response.data[i].tipo.includes("Sucursal")) {
                             setBranchCategories(prevArray => [...prevArray, response.data[i]])
+                        }
+                        if (response.data[i].tipo.includes("Pagar")) {
+                            setPayCategories(prevArray => [...prevArray, response.data[i]])
                         }
                         if(response.data[i].categories === "Caja") {
                             setCajaId(response.data[i].idmovcategories)
@@ -84,8 +88,7 @@ function MovesBranches() {
                 .then(response => {
                     const movNameId = response.data.insertId
                     arrayMovements.push([1, -montoTotal, movNameId])
-                    arrayMovements.push([1, 1, movNameId])
-                    arrayMovements.push([1, 1, movNameId])
+                    arrayMovements.push([1, montoTotal, movNameId])
                     //libro
                     if (valueUsd !== 0){
                         arrayMovements.push([usdId, valueUsd, movNameId])
@@ -110,7 +113,7 @@ function MovesBranches() {
                 .then(response => {
                     console.log(response)
                     if (response.status === 200){ 
-                        alert("Venta agregada")
+                        alert("Pago agregado")
                         navigate('/movements');
                     } 
                 })
@@ -131,15 +134,26 @@ function MovesBranches() {
                 <div className="p-4 max-w-3xl mx-auto">
                     <form onSubmit={handleSubmit} className="mb-4">
                         <div className="mb-2">
-                            <div className='w-1/2'>
-                                    <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Categoria: *</label>
-                                    <select name="category" id="category" className='w-full shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' >
-                                        <option value="" disabled selected>Quien puso la mosca</option>
+                            <div className='flex items-end bg-blue-100 mb-1 p-2'>
+                                <div className='w-1/2'>
+                                    <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Sucursal: *</label>
+                                    <select name="branch" id="branch" defaultValue={""} className='w-full shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' >
+                                        <option value="" disabled>Quien puso la mosca</option>
                                         {branchCategories.map((category) => (
                                             <option key={category.idmovcategories} value={category.idmovcategories}>{category.categories}</option>
                                         ))}
                                     </select>
                                 </div>
+                                <div className='w-1/2'>
+                                    <label className="block text-gray-700 font-bold mb-2" htmlFor="name">A quien: *</label>
+                                    <select name="account" id="account" defaultValue={""} className='w-full shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' >
+                                        <option value="" disabled >En que</option>
+                                        {payCategories.map((category) => (
+                                            <option key={category.idmovcategories} value={category.idmovcategories}>{category.categories}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
                             {/* Valores Cliente */}
                             <div className='flex items-end bg-blue-100 mb-1 p-2'>
                                 <div className='w-full text-center'>
