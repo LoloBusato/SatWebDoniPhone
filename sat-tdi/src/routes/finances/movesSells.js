@@ -110,7 +110,7 @@ function MovesSells() {
             } else{
                 const responseClient = await axios.post('http://localhost:3001/clients', clientData);
                 if (responseClient.status === 200){
-                    client = `${responseClient.data[0].name} ${responseClient.data[0].surname}`
+                    client = `${formData.get('name').trim()} ${formData.get('surname').trim()}`
                 } 
             }
             const cuentaVuelto = parseInt(document.getElementById("cuenta").value)
@@ -132,6 +132,8 @@ function MovesSells() {
             const montoPesos = pesosArr.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
             const montoTotal = montoPesos + (montoUSD * dolar)
 
+            const arrayMovements = []
+
             // movname
             await axios.post('http://localhost:3001/movname', {
                 ingreso: "Caja", 
@@ -142,47 +144,52 @@ function MovesSells() {
             })
                 .then(response => {
                     const movNameId = response.data.insertId
-                    const arrayMovements = []
-                    
-                    arrayMovements.append([ventaId, -montoTotal, movNameId])
-                    arrayMovements.append([cmvId, parseFloat(device.precio_compra), movNameId])
-                    arrayMovements.append([repuestosId, -parseFloat(device.precio_compra), movNameId])
+                    arrayMovements.push([ventaId, -montoTotal, movNameId])
+                    arrayMovements.push([cmvId, parseFloat(device.precio_compra), movNameId])
+                    arrayMovements.push([repuestosId, -parseFloat(device.precio_compra), movNameId])
                     //libro
                     if (valueUsd !== 0){
-                        arrayMovements.append([usdId, valueUsd, movNameId])
+                        arrayMovements.push([usdId, valueUsd, movNameId])
                     }
                     if (valueTrans !== 0){
-                        arrayMovements.append([bancoId, valueTrans, movNameId])
+                        arrayMovements.push([bancoId, valueTrans, movNameId])
                     }
                     if (valuePesos !== 0){
-                        arrayMovements.append([pesosId, valuePesos, movNameId])
+                        arrayMovements.push([pesosId, valuePesos, movNameId])
                     }
                     if (valueMp !== 0){
-                        arrayMovements.append([mpId, valueMp, movNameId])
+                        arrayMovements.push([mpId, valueMp, movNameId])
                     }
                     if (cuentaVuelto === cajaId) {
                         if (vueltoUsd !== 0){
-                            arrayMovements.append([usdId, vueltoUsd, movNameId])
+                            arrayMovements.push([usdId, vueltoUsd, movNameId])
                         }
                         if (vueltoTrans !== 0){
-                            arrayMovements.append([bancoId, vueltoTrans, movNameId])
+                            arrayMovements.push([bancoId, vueltoTrans, movNameId])
                         }
                         if (vueltoPesos !== 0){
-                            arrayMovements.append([pesosId, vueltoPesos, movNameId])
+                            arrayMovements.push([pesosId, vueltoPesos, movNameId])
                         }
                         if (vueltoMp !== 0){
-                            arrayMovements.append([mpId, vueltoMp, movNameId])
+                            arrayMovements.push([mpId, vueltoMp, movNameId])
                         }
                     } else {
                         const vuelto = (vueltoUsd * dolar) + vueltoTrans + vueltoPesos + vueltoMp
-                        arrayMovements.append([cuentaVuelto, vuelto, movNameId])
+                        arrayMovements.push([cuentaVuelto, vuelto, movNameId])
                     }
-                    const responseMovements = axios.post('http://localhost:3001/movements', {
-                        arrayInsert: arrayMovements
-                    })
-                    if (responseMovements.status === 200){ 
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+
+            await axios.post('http://localhost:3001/movements', {
+                arrayInsert: arrayMovements
+            })
+                .then(response => {
+                    console.log(response)
+                    if (response.status === 200){ 
                         alert("Venta agregada")
-                        window.location.reload();
+                        navigate('/movements');
                     } 
                 })
                 .catch(error => {
