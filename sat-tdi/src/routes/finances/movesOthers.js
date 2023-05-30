@@ -144,30 +144,39 @@ function MovesOthers() {
         <div className='bg-gray-300 min-h-screen pb-2'>
             <MainNavBar />
             <div className='bg-white my-2 py-8 px-2 max-w-4xl mx-auto'>
-                <h1 className="text-center text-5xl">Pago sucursal</h1>
+                <h1 className="text-center text-5xl">Pagos varios</h1>
                 {/* Sucursal */}
                 <div className="p-4 max-w-3xl mx-auto">
                     <form onSubmit={handleSubmit} className="mb-4">
                         <div className="mb-2">
                             <div className='flex items-end bg-blue-100 mb-1 p-2'>
-                                <div className='w-1/2'>
-                                    <label className="block text-gray-700 font-bold mb-2">Sucursal: *</label>
-                                    <select name="branch" id="branch" defaultValue={""} className='w-full shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' >
-                                        <option value="" disabled>Sucursal</option>
-                                        {otherCategories.map((category) => (
-                                            <option key={category.idmovcategories} value={JSON.stringify(category)}>{category.categories}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div className='w-1/2'>
-                                    <label className="block text-gray-700 font-bold mb-2">A quien: *</label>
+                                <div className='w-full'>
+                                    <label className="block text-gray-700 font-bold mb-2">Quien: *</label>
                                     <select name="account" id="account" defaultValue={""} className='w-full shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' >
-                                        <option value="" disabled >A quien</option>
+                                        <option value="" disabled >Quien</option>
                                         {payCategories.map((category) => (
                                             <option key={category.idmovcategories} value={JSON.stringify(category)}>{category.categories}</option>
                                         ))}
                                     </select>
                                 </div>
+                                <div className='w-full'>
+                                    <label className="block text-gray-700 font-bold mb-2">Categoria: *</label>
+                                    <select name="branch" id="branch" defaultValue={""} className='w-full shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' >
+                                        <option value="" disabled>Categoria</option>
+                                        {otherCategories.map((category) => (
+                                            <option key={category.idmovcategories} value={JSON.stringify(category)}>{category.categories}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className='w-full'>
+                                    <label className="block text-gray-700 font-bold mb-2">Gasto: *</label>
+                                    <input 
+                                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+                                        type="text"
+                                        id="gasto" 
+                                        name='gasto'
+                                    />
+                                </div>  
                             </div>
                             {/* Valores Cliente */}
                             <div className='flex items-end bg-blue-100 mb-1 p-2'>
