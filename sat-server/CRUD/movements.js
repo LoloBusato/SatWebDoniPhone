@@ -7,23 +7,22 @@ const db = require('../database/dbConfig');
 // CRUD de movimientos
 // create
 router.post('/', async (req, res) => {
-    const { movCategoriesId, unidades, movnameId } = req.body;
+  const { arrayInsert } = req.body;
 
-    const values = [
-        movCategoriesId,
-        unidades,
-        movnameId
-    ]
-  
-    const qCreateMove= "INSERT INTO movements (movcategories_id, unidades, movname_id) VALUES (?, ?, ?)";
-    db.query(qCreateMove, values, (err, data) => {
-        if (err) {
-        console.log("error: ", err);
-        return res.status(400).send("No se pudo agregar el movimiento.");
-        }
-        return res.status(200).send(data);
-    });    
+  // arrayInsert = [[movCategoriesId, unidades, movnameId], [movCategoriesId, unidades, movnameId], ...]
+
+  const values = arrayInsert.map(element => [element[0], element[1], element[2]]);
+
+  const qCreateMove = "INSERT INTO movements (movcategories_id, unidades, movname_id) VALUES ?";
+
+  db.query(qCreateMove, [values], (err, data) => {
+    if (err) {
+      console.log("error: ", err);
+      return res.status(400).send("No se pudieron agregar los movimientos.");
+    }
+    return res.status(200).send("Movimientos ingresados correctamente");
   });
+});
   // read
   router.get("/", (req, res) => {
     const qgetMovements = "SELECT * FROM movements";
