@@ -33,7 +33,7 @@ router.post("/", (req, res) => {
       
       db.query(qInsertReduceStock, values, (err, data) => {
         if (err) return res.status(400).send(err);
-        return res.status(200).json(data);
+        return res.status(200).send(data);
       });
     });
   

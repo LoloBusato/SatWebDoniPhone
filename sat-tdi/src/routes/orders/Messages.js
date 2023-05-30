@@ -111,13 +111,15 @@ function Messages() {
     async function agregarRepuesto(stockId, orderId, userId, cantidad) {
         cantidad -= 1
         try {    
-            await axios.post(`http://localhost:3001/reduceStock/`, {
+            const responseReduce = await axios.post(`http://localhost:3001/reduceStock`, {
                 cantidad,
                 stockId,
                 orderId,
                 userId
             })
-            window.location.reload();
+            if(responseReduce.status === 200) {
+                window.location.reload();
+            }
         } catch (error) {
             console.error(error)
         }

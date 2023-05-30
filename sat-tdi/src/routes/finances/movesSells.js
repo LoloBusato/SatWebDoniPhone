@@ -56,11 +56,8 @@ function MovesSells() {
 
             await axios.get('http://localhost:3001/stock')
                 .then(response => {
-                    for (let i = 0; i < response.data.length; i++) {
-                        if (response.data[i].repuesto.includes("Bateria")) {
-                            setSellStock(prevArray => [...prevArray, response.data[i]])
-                        }                    
-                    }
+                    const filteredData = response.data.filter(item => item.repuesto.includes("Bateria"));
+                    setSellStock(filteredData);
                 })
                 .catch(error => {
                     console.error(error);
@@ -175,26 +172,36 @@ function MovesSells() {
                         }
                     } else {
                         const vuelto = (vueltoUsd * dolar) + vueltoTrans + vueltoPesos + vueltoMp
-                        arrayMovements.push([cuentaVuelto, vuelto, movNameId])
+                        if (vuelto !== 0){
+                            arrayMovements.push([cuentaVuelto, vuelto, movNameId])
+                        }
                     }
                 })
                 .catch(error => {
                     console.error(error);
                 });
-
-            await axios.post('http://localhost:3001/movements', {
-                arrayInsert: arrayMovements
+            
+            const responseReduce = await axios.post(`http://localhost:3001/reduceStock`, {
+                cantidad: (device.cantidad - 1),
+                stockId: device.idstock,
+                orderId: null,
+                userId,
             })
-                .then(response => {
-                    console.log(response)
-                    if (response.status === 200){ 
-                        alert("Venta agregada")
-                        navigate('/movements');
-                    } 
+            if(responseReduce.status === 200) {
+                await axios.post('http://localhost:3001/movements', {
+                    arrayInsert: arrayMovements
                 })
-                .catch(error => {
-                    console.error(error);
-                });
+                    .then(response => {
+                        console.log(response)
+                        if (response.status === 200){ 
+                            alert("Venta agregada")
+                            navigate('/movements');
+                        } 
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            }
         } catch (error) {
             alert(error.response.data);
         }
