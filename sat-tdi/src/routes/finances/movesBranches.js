@@ -77,30 +77,36 @@ function MovesBranches() {
 
             const arrayMovements = []
 
+            const branch = JSON.parse(document.getElementById("branch").value)
+            const account = JSON.parse(document.getElementById("account").value)
+
             // movname
             await axios.post('http://localhost:3001/movname', {
-                ingreso: "Caja", 
-                egreso: "Venta", 
+                ingreso: account.categories, 
+                egreso: branch.categories, 
                 operacion: `Pago Sucursal`, 
                 monto: montoTotal,
                 userId
             })
                 .then(response => {
                     const movNameId = response.data.insertId
-                    arrayMovements.push([1, -montoTotal, movNameId])
-                    arrayMovements.push([1, montoTotal, movNameId])
+                    arrayMovements.push([branch.idmovcategories, -montoTotal, movNameId])
                     //libro
-                    if (valueUsd !== 0){
-                        arrayMovements.push([usdId, valueUsd, movNameId])
-                    }
-                    if (valueTrans !== 0){
-                        arrayMovements.push([bancoId, valueTrans, movNameId])
-                    }
-                    if (valuePesos !== 0){
-                        arrayMovements.push([pesosId, valuePesos, movNameId])
-                    }
-                    if (valueMp !== 0){
-                        arrayMovements.push([mpId, valueMp, movNameId])
+                    if(cajaId === account.idmovcategories) {
+                        if (valueUsd !== 0){
+                            arrayMovements.push([usdId, valueUsd, movNameId])
+                        }
+                        if (valueTrans !== 0){
+                            arrayMovements.push([bancoId, valueTrans, movNameId])
+                        }
+                        if (valuePesos !== 0){
+                            arrayMovements.push([pesosId, valuePesos, movNameId])
+                        }
+                        if (valueMp !== 0){
+                            arrayMovements.push([mpId, valueMp, movNameId])
+                        }
+                    } else {
+                        arrayMovements.push([account.idmovcategories, montoTotal, movNameId])
                     }
                 })
                 .catch(error => {
@@ -136,20 +142,20 @@ function MovesBranches() {
                         <div className="mb-2">
                             <div className='flex items-end bg-blue-100 mb-1 p-2'>
                                 <div className='w-1/2'>
-                                    <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Sucursal: *</label>
+                                    <label className="block text-gray-700 font-bold mb-2">Sucursal: *</label>
                                     <select name="branch" id="branch" defaultValue={""} className='w-full shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' >
-                                        <option value="" disabled>Quien puso la mosca</option>
+                                        <option value="" disabled>Sucursal</option>
                                         {branchCategories.map((category) => (
-                                            <option key={category.idmovcategories} value={category.idmovcategories}>{category.categories}</option>
+                                            <option key={category.idmovcategories} value={JSON.stringify(category)}>{category.categories}</option>
                                         ))}
                                     </select>
                                 </div>
                                 <div className='w-1/2'>
-                                    <label className="block text-gray-700 font-bold mb-2" htmlFor="name">A quien: *</label>
+                                    <label className="block text-gray-700 font-bold mb-2">A quien: *</label>
                                     <select name="account" id="account" defaultValue={""} className='w-full shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' >
-                                        <option value="" disabled >En que</option>
+                                        <option value="" disabled >A quien</option>
                                         {payCategories.map((category) => (
-                                            <option key={category.idmovcategories} value={category.idmovcategories}>{category.categories}</option>
+                                            <option key={category.idmovcategories} value={JSON.stringify(category)}>{category.categories}</option>
                                         ))}
                                     </select>
                                 </div>
