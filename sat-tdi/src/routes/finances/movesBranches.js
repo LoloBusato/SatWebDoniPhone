@@ -172,6 +172,7 @@ function MovesBranches() {
                                                 type="number"
                                                 step="0.01" 
                                                 defaultValue="0"
+                                                min="0"
                                                 id="clientePesos" 
                                                 name='clientePesos'
                                             />
@@ -183,6 +184,7 @@ function MovesBranches() {
                                                 type="number"
                                                 step="0.01" 
                                                 defaultValue="0"
+                                                min="0"
                                                 id="clienteUSD" 
                                                 name='clienteUSD'
                                             />
@@ -194,6 +196,7 @@ function MovesBranches() {
                                                 type="number"
                                                 step="0.01" 
                                                 defaultValue="0"
+                                                min="0"
                                                 id="clienteBanco" 
                                                 name='clienteBanco'
                                             />
@@ -203,7 +206,8 @@ function MovesBranches() {
                                             <input 
                                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
                                                 type="number"
-                                                step="0.01" 
+                                                step="0.01"
+                                                min="0"
                                                 defaultValue="0"
                                                 id="clienteMercadopago" 
                                                 name='clienteMercadopago'
