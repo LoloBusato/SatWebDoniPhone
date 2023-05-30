@@ -142,93 +142,52 @@ function MovesSells() {
             })
                 .then(response => {
                     const movNameId = response.data.insertId
+                    const arrayMovements = []
+                    
+                    arrayMovements.append([ventaId, -montoTotal, movNameId])
+                    arrayMovements.append([cmvId, parseFloat(device.precio_compra), movNameId])
+                    arrayMovements.append([repuestosId, -parseFloat(device.precio_compra), movNameId])
                     //libro
                     if (valueUsd !== 0){
-                        axios.post('http://localhost:3001/movements', {
-                            movCategoriesId: usdId,
-                            unidades: valueUsd,
-                            movnameId: movNameId
-                        })
+                        arrayMovements.append([usdId, valueUsd, movNameId])
                     }
                     if (valueTrans !== 0){
-                        axios.post('http://localhost:3001/movements', {
-                            movCategoriesId: bancoId,
-                            unidades: valueTrans,
-                            movnameId: movNameId
-                        })
+                        arrayMovements.append([bancoId, valueTrans, movNameId])
                     }
                     if (valuePesos !== 0){
-                        axios.post('http://localhost:3001/movements', {
-                            movCategoriesId: pesosId,
-                            unidades: valuePesos,
-                            movnameId: movNameId
-                        })
+                        arrayMovements.append([pesosId, valuePesos, movNameId])
                     }
                     if (valueMp !== 0){
-                        axios.post('http://localhost:3001/movements', {
-                            movCategoriesId: mpId,
-                            unidades: valueMp,
-                            movnameId: movNameId
-                        })
+                        arrayMovements.append([mpId, valueMp, movNameId])
                     }
-                    axios.post('http://localhost:3001/movements', {
-                        movCategoriesId: ventaId,
-                        unidades: -montoTotal,
-                        movnameId: movNameId
-                    })
-                    axios.post('http://localhost:3001/movements', {
-                        movCategoriesId: cmvId,
-                        unidades: parseFloat(device.precio_compra),
-                        movnameId: movNameId
-                    })
-                    axios.post('http://localhost:3001/movements', {
-                        movCategoriesId: repuestosId,
-                        unidades: -parseFloat(device.precio_compra),
-                        movnameId: movNameId
-                    })
                     if (cuentaVuelto === cajaId) {
                         if (vueltoUsd !== 0){
-                            axios.post('http://localhost:3001/movements', {
-                                movCategoriesId: usdId,
-                                unidades: vueltoUsd,
-                                movnameId: movNameId
-                            })
+                            arrayMovements.append([usdId, vueltoUsd, movNameId])
                         }
                         if (vueltoTrans !== 0){
-                            axios.post('http://localhost:3001/movements', {
-                                movCategoriesId: bancoId,
-                                unidades: vueltoTrans,
-                                movnameId: movNameId
-                            })
+                            arrayMovements.append([bancoId, vueltoTrans, movNameId])
                         }
                         if (vueltoPesos !== 0){
-                            axios.post('http://localhost:3001/movements', {
-                                movCategoriesId: pesosId,
-                                unidades: vueltoPesos,
-                                movnameId: movNameId
-                            })
+                            arrayMovements.append([pesosId, vueltoPesos, movNameId])
                         }
                         if (vueltoMp !== 0){
-                            axios.post('http://localhost:3001/movements', {
-                                movCategoriesId: mpId,
-                                unidades: vueltoMp,
-                                movnameId: movNameId
-                            })
+                            arrayMovements.append([mpId, vueltoMp, movNameId])
                         }
                     } else {
                         const vuelto = (vueltoUsd * dolar) + vueltoTrans + vueltoPesos + vueltoMp
-                        axios.post('http://localhost:3001/movements', {
-                            movCategoriesId: cuentaVuelto,
-                            unidades: vuelto,
-                            movnameId: movNameId
-                        })
+                        arrayMovements.append([cuentaVuelto, vuelto, movNameId])
                     }
+                    const responseMovements = axios.post('http://localhost:3001/movements', {
+                        arrayInsert: arrayMovements
+                    })
+                    if (responseMovements.status === 200){ 
+                        alert("Venta agregada")
+                        window.location.reload();
+                    } 
                 })
                 .catch(error => {
                     console.error(error);
                 });
-                alert("Venta agregada")
-                window.location.reload();
         } catch (error) {
             alert(error.response.data);
         }
