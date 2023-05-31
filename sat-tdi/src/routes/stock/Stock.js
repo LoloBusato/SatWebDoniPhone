@@ -14,6 +14,7 @@ function StockForm() {
   const [usdId, setusdId] = useState(0)
   const [mpId, setmpId] = useState(0)
   const [bancoId, setBancoId] = useState(0)
+  const [repuestosId, setRepuestosId] = useState(0)
 
   const [dolar, setDolar] = useState(500)
 
@@ -66,7 +67,9 @@ function StockForm() {
                       setmpId(response.data[i].idmovcategories)
                   } else if(response.data[i].categories === "Banco") {
                       setBancoId(response.data[i].idmovcategories)
-                  }                  
+                  } else if(response.data[i].categories === "Repuestos") {
+                    setRepuestosId(response.data[i].idmovcategories)
+                  }          
               }
           })
           .catch(error => {
@@ -89,19 +92,31 @@ function StockForm() {
       try {
           const userId = JSON.parse(localStorage.getItem("userId"))
 
+          const repuestoValue = JSON.parse(document.getElementById("repuesto_nombre").value)
+
           const formData = new FormData(event.target);
+
+          let fecha_compra = document.getElementById('fecha_ingreso')
+          if(fecha_compra == ''){
+            const fechaActual = new Date();
+            const anio = fechaActual.getFullYear();
+            const mes = ('0' + (fechaActual.getMonth() + 1)).slice(-2);
+            const dia = ('0' + fechaActual.getDate()).slice(-2);
+            fecha_compra = anio + '-' + mes + '-' + dia;
+          }
+
           const stockData = {
-            repuesto_id: formData.get('repuesto_nombre'),
+            repuesto_id: repuestoValue.idrepuestos,
             cantidad: formData.get('cantidad'),
             precio_compra: formData.get('precio_compra'),
-            fecha_compra: formData.get('fecha_ingreso'),
+            fecha_compra,
             proveedor_id: formData.get('proveedor_nombre'),
           };
 
+          let stockId;
           await axios.post('http://localhost:3001/stock', stockData)
               .then(response => {
-                alert("Stock agregado correctamente")
-                window.location.reload();
+                  stockId = response.data.insertId
                 // Aquí puedes hacer algo con la respuesta del backend, como mostrar un mensaje de éxito al usuario
                 })
               .catch(error => {
@@ -120,37 +135,33 @@ function StockForm() {
           const montoUSD = dolarArr.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
           const montoPesos = pesosArr.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
           const montoTotal = montoPesos + (montoUSD * dolar)
+          const montoTotalUsd = montoTotal / dolar
 
           const arrayMovements = []
 
-          const gasto = formData.get('gasto')
-
-          const otherValue = document.getElementById("other").value
           const accountValue = document.getElementById("account").value
 
-          if(montoTotal === 0){
-              return alert("Ingresar montos")
-          } else if(otherValue === "" || accountValue === ""){
-              return alert("Seleccionar cajas")
-          } else if(gasto.trim() === ""){
-              return alert("Ingresar el nombre del gasto")
+          if(accountValue === ""){
+            return alert("Seleccionar caja")
           }
-
-          const other = JSON.parse(otherValue)
+          
           const account = JSON.parse(accountValue)
 
+          if(montoTotal === 0 && account.categories !== "Existencia"){
+              return alert("Ingresar montos")
+          }
 
           // movname
           await axios.post('http://localhost:3001/movname', {
-              ingreso: other.categories, 
+              ingreso: "Repuestos", 
               egreso: account.categories, 
-              operacion: gasto, 
-              monto: montoTotal,
+              operacion: `Repuesto ${repuestoValue.repuesto} x${stockData.cantidad}`, 
+              monto: montoTotalUsd,
               userId
           })
               .then(response => {
                   const movNameId = response.data.insertId
-                  arrayMovements.push([other.idmovcategories, montoTotal, movNameId])
+                  arrayMovements.push([repuestosId, montoTotalUsd, movNameId])
                   //libro
                   if(cajaId === account.idmovcategories) {
                       if (valueUsd !== 0){
@@ -179,8 +190,8 @@ function StockForm() {
               .then(response => {
                   console.log(response)
                   if (response.status === 200){ 
-                      alert("Pago agregado")
-                      navigate('/movements');
+                      alert("repuesto agregado")
+                      navigate(`/printCode/${stockId + repuestoValue.repuesto.split(" ")[0].slice(0,2) + repuestoValue.repuesto.split(" ")[1].slice(0,1) + repuestoValue.repuesto.split(" ")[3] + repuestoValue.repuesto.split(" ")[4].slice(0,1) + stockData.fecha_compra.slice(0, 10).split("-")[0].slice(2,4) + stockData.fecha_compra.slice(0, 10).split("-")[1] + stockData.fecha_compra.slice(0, 10).split("-")[2]}`);
                   } 
               })
               .catch(error => {
@@ -213,7 +224,7 @@ function StockForm() {
           <div className='relative'>
             <select name="repuesto_nombre" className="mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline">
               {repuestos.map((repuesto) => (
-                <option key={repuesto.idrepuestos} value={repuesto.idrepuestos}>{repuesto.repuesto}</option>
+                <option key={repuesto.idrepuestos} value={JSON.stringify(repuesto)}>{repuesto.repuesto}</option>
               ))}
             </select>
             <div className='pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700'>
@@ -235,7 +246,7 @@ function StockForm() {
           <label htmlFor="precio_compra" className='block text-gray-700 font-bold mb-2'>
             Precio de compra (USD):
           </label>
-          <input type="number" name="precio_compra" className="mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline" />
+          <input type="number" defaultValue="" name="precio_compra" className="mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline" />
         </div>
         <div className='mb-4'>
           <label htmlFor="proveedor_nombre" className='block text-gray-700 font-bold mb-2'>
@@ -263,7 +274,7 @@ function StockForm() {
                 <select name="category" id="category" className='mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline' >
                     <option value="" disabled selected>Cuenta</option>
                     {stockCategories.map((category) => (
-                        <option key={category.idmovcategories} value={category.idmovcategories}>{category.categories}</option>
+                        <option key={category.idmovcategories} value={JSON.stringify(category)}>{category.categories}</option>
                     ))}
                 </select>
             </div>
