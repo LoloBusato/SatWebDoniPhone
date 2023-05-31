@@ -13,6 +13,7 @@ function MovesRepairs() {
     const [bancoId, setBancoId] = useState(0)
 
     const [dolar, setDolar] = useState(500)
+    const [reduceStock, setReduceStock] = useState([]);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -49,6 +50,15 @@ function MovesRepairs() {
             await axios.get(`https://api.bluelytics.com.ar/v2/latest`)
                 .then(response => {
                     setDolar(response.data.blue.value_sell)
+                })
+                .catch(error => {
+                    console.error(error)
+                })
+
+            await axios.get(`http://localhost:3001/reduceStock`)
+                .then(response => {
+                    const reduceStockFilt = response.data.filter(item => item.orderid === orderId)
+                    setReduceStock(reduceStockFilt)
                 })
                 .catch(error => {
                     console.error(error)
