@@ -61,23 +61,6 @@ router.post("/", (req, res) => {
       return res.status(200).json(data);
     });
   })
-  router.get('/:nombre', (req, res) => {
-  
-    const nombre = req.params.nombre;
-    const sql = `SELECT idproveedores FROM proveedores WHERE nombre = ?`;
-  
-    db.query(sql, [nombre], (err, result) => {
-      if (err) {
-        console.error(err);
-        res.status(500).send('Error al obtener el ID del proveedor');
-      } else if (result.length === 0) {
-        res.status(404).send('No se encontró ningún proveedor con ese nombre');
-      } else {
-        const proveedorId = result[0].idproveedores;
-        res.status(200).send(`${proveedorId}`);
-      }
-    });
-  });
   /* ------------------------------------------------------------- */
 
   module.exports = router

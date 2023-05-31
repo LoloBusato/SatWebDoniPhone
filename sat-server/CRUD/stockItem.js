@@ -49,22 +49,5 @@ router.post("/", (req, res) => {
       return res.status(200).json(data);
     });
   })
-  router.get('/:nombre', (req, res) => {
-  
-    const nombre = req.params.nombre;
-    const sql = `SELECT idrepuestos FROM repuestos WHERE repuesto = ?`;
-  
-    db.query(sql, [nombre], (err, result) => {
-      if (err) {
-        console.error(err);
-        res.status(500).send('Error al obtener el ID del repuesto');
-      } else if (result.length === 0) {
-        res.status(404).send('No se encontró ningún repuesto con ese nombre');
-      } else {
-        const repuestoId = result[0].idrepuestos;
-        res.status(200).send(`${repuestoId}`);
-      }
-    });
-  });
 
   module.exports = router
