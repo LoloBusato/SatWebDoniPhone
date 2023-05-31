@@ -43,7 +43,6 @@ function StockForm() {
 
       await axios.get('http://localhost:3001/stock')
         .then(response => {
-          console.log(response.data)
           setStock(response.data);
         })
         .catch(error => {
