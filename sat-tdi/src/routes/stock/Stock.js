@@ -110,9 +110,9 @@ function StockForm() {
             cantidad: parseInt(formData.get('cantidad')),
             precio_compra: parseFloat(formData.get('precio_compra')),
             fecha_compra,
+            cantidad_limite: parseInt(formData.get('cantidad_limite')),
             proveedor_id: parseInt(formData.get('proveedor_nombre')),
           };
-          console.log(stockData)
 
           let stockId;
           await axios.post('http://localhost:3001/stock', stockData)
@@ -225,7 +225,8 @@ function StockForm() {
             Repuesto:
           </label>
           <div className='relative'>
-            <select name="repuesto" id="repuesto" className="mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline">
+            <select name="repuesto" id="repuesto" defaultValue="" className="mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline">
+              <option value="" disabled >Repuesto</option>
               {repuestos.map((repuesto) => (
                 <option key={repuesto.idrepuestos} value={JSON.stringify(repuesto)}>{repuesto.repuesto}</option>
               ))}
@@ -246,6 +247,12 @@ function StockForm() {
           <input type="number" name="cantidad" className="mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline" />
         </div>
         <div className='mb-4'>
+          <label htmlFor="cantidad_limite" className='block text-gray-700 font-bold mb-2'>
+            Cantidad para avisar:
+          </label>
+          <input type="number" name="cantidad_limite" className="mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline" />
+        </div>
+        <div className='mb-4'>
           <label htmlFor="precio_compra" className='block text-gray-700 font-bold mb-2'>
             Precio de compra (USD):
           </label>
@@ -256,7 +263,8 @@ function StockForm() {
             Proveedor:
           </label>
           <div className='relative'>
-            <select name="proveedor_nombre" className="mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline">
+            <select name="proveedor_nombre" defaultValue="" className="mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline">
+              <option value="" disabled >Proveedor</option>
               {proveedores.map(proveedor => (
                 <option key={proveedor.idproveedores} value={proveedor.idproveedores}>{proveedor.nombre}</option>
               ))}
@@ -274,8 +282,8 @@ function StockForm() {
             {/* Valores */}
             <div className='w-full'>
                 <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Cuenta: *</label>
-                <select name="category" id="category" className='mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline' >
-                    <option value="" disabled selected>Cuenta</option>
+                <select name="category" id="category" defaultValue={""} className='mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline' >
+                    <option value="" disabled >Cuenta</option>
                     {stockCategories.map((category) => (
                         <option key={category.idmovcategories} value={JSON.stringify(category)}>{category.categories}</option>
                     ))}

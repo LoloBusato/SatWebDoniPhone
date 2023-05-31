@@ -17,15 +17,16 @@ Fecha de ingreso => default | new Date()
 */
 // create
 router.post("/", (req, res) => {
-    const { repuesto_id, cantidad, precio_compra, proveedor_id, fecha_compra } = req.body;
-    const qCreateStock = "INSERT INTO stock (repuesto_id, cantidad, precio_compra, proveedor_id, fecha_compra) VALUES (?, ?, ?, ?, ?)";
+    const { repuesto_id, cantidad, precio_compra, proveedor_id, fecha_compra, cantidad_limite } = req.body;
+    const qCreateStock = "INSERT INTO stock (repuesto_id, cantidad, precio_compra, proveedor_id, fecha_compra, cantidad_limite) VALUES (?, ?, ?, ?, ?, ?)";
   
     const values = [
       repuesto_id, 
       cantidad, 
       precio_compra, 
       proveedor_id, 
-      fecha_compra, 
+      fecha_compra,
+      cantidad_limite,
     ]
   
     db.query(qCreateStock, values, (err, data) => {
