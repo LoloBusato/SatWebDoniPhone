@@ -40,9 +40,9 @@ router.post("/", (req, res) => {
     db.query(qCreateStock, values, (err, data) => {
       if (err) {
         console.log("error: ", err);
-        return res.status(400).send("No se pudo agregar el stock.");
+        return res.status(400).send(err);
       }
-      return res.status(200).send("Stock agregado correctamente.");
+      return res.status(200).send(data);
     });    
   })
   // read
