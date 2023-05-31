@@ -17,17 +17,8 @@ Fecha de ingreso => default | new Date()
 */
 // create
 router.post("/", (req, res) => {
-    const { repuesto_id, cantidad, precio_compra, proveedor_id } = req.body;
-    let fecha_compra = req.body.fecha_compra
+    const { repuesto_id, cantidad, precio_compra, proveedor_id, fecha_compra } = req.body;
     const qCreateStock = "INSERT INTO stock (repuesto_id, cantidad, precio_compra, proveedor_id, fecha_compra) VALUES (?, ?, ?, ?, ?)";
-  
-    if(fecha_compra == ''){
-      const fechaActual = new Date();
-      const anio = fechaActual.getFullYear();
-      const mes = ('0' + (fechaActual.getMonth() + 1)).slice(-2);
-      const dia = ('0' + fechaActual.getDate()).slice(-2);
-      fecha_compra = anio + '-' + mes + '-' + dia;
-    }
   
     const values = [
       repuesto_id, 
