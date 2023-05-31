@@ -92,12 +92,12 @@ function StockForm() {
       try {
           const userId = JSON.parse(localStorage.getItem("userId"))
 
-          const repuestoValue = JSON.parse(document.getElementById("repuesto_nombre").value)
+          const repuestoValue = JSON.parse(document.getElementById("repuesto").value)
 
           const formData = new FormData(event.target);
 
-          let fecha_compra = document.getElementById('fecha_ingreso')
-          if(fecha_compra == ''){
+          let fecha_compra = document.getElementById('fecha_ingreso').value
+          if(fecha_compra === ""){
             const fechaActual = new Date();
             const anio = fechaActual.getFullYear();
             const mes = ('0' + (fechaActual.getMonth() + 1)).slice(-2);
@@ -107,11 +107,12 @@ function StockForm() {
 
           const stockData = {
             repuesto_id: repuestoValue.idrepuestos,
-            cantidad: formData.get('cantidad'),
-            precio_compra: formData.get('precio_compra'),
+            cantidad: parseInt(formData.get('cantidad')),
+            precio_compra: parseFloat(formData.get('precio_compra')),
             fecha_compra,
-            proveedor_id: formData.get('proveedor_nombre'),
+            proveedor_id: parseInt(formData.get('proveedor_nombre')),
           };
+          console.log(stockData)
 
           let stockId;
           await axios.post('http://localhost:3001/stock', stockData)
@@ -135,7 +136,7 @@ function StockForm() {
           const montoUSD = dolarArr.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
           const montoPesos = pesosArr.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
           const montoTotal = montoPesos + (montoUSD * dolar)
-          const montoTotalUsd = montoTotal / dolar
+          let montoTotalUsd = montoTotal / dolar
 
           const arrayMovements = []
 
@@ -147,8 +148,10 @@ function StockForm() {
           
           const account = JSON.parse(accountValue)
 
-          if(montoTotal === 0 && account.categories !== "Existencia"){
+          if(montoTotal === 0 && account.idmovcategories === cajaId){
               return alert("Ingresar montos")
+          } else {
+            montoTotalUsd = parseInt(stockData.cantidad) * parseFloat(stockData.precio_compra)  
           }
 
           // movname
@@ -222,7 +225,7 @@ function StockForm() {
             Repuesto:
           </label>
           <div className='relative'>
-            <select name="repuesto_nombre" className="mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline">
+            <select name="repuesto" id="repuesto" className="mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline">
               {repuestos.map((repuesto) => (
                 <option key={repuesto.idrepuestos} value={JSON.stringify(repuesto)}>{repuesto.repuesto}</option>
               ))}
@@ -246,7 +249,7 @@ function StockForm() {
           <label htmlFor="precio_compra" className='block text-gray-700 font-bold mb-2'>
             Precio de compra (USD):
           </label>
-          <input type="number" defaultValue="" name="precio_compra" className="mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline" />
+          <input type="number" step='0.01' min='0' name="precio_compra" className="mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline" />
         </div>
         <div className='mb-4'>
           <label htmlFor="proveedor_nombre" className='block text-gray-700 font-bold mb-2'>
@@ -324,7 +327,7 @@ function StockForm() {
           <label htmlFor="fecha_ingreso" className='block text-gray-700 font-bold mb-2'>
             Fecha de compra:
           </label>
-          <input type="date" name="fecha_ingreso" className="mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline" />
+          <input type="date" name="fecha_ingreso" id="fecha_ingreso" defaultValue="" className="mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline" />
         </div>
         <div className='flex items-center justify-center px-10'>
           <button type="submit" className='bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded'>
