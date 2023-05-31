@@ -7,7 +7,15 @@ function StockForm() {
   const [proveedores, setProveedores] = useState([]);
   const [repuestos, setRepuestos] = useState([]);
   const [stock, setStock] = useState([]);
+
   const [stockCategories, setStockCategories] = useState([])
+  const [cajaId, setCajaId] = useState(0)
+  const [pesosId, setPesosId] = useState(0)
+  const [usdId, setusdId] = useState(0)
+  const [mpId, setmpId] = useState(0)
+  const [bancoId, setBancoId] = useState(0)
+
+  const [dolar, setDolar] = useState(500)
 
   const navigate = useNavigate();
 
@@ -32,7 +40,6 @@ function StockForm() {
         // Aquí puedes mostrar un mensaje de error al usuario si la solicitud falla
       });
 
-
       await axios.get('http://localhost:3001/stock')
         .then(response => {
           console.log(response.data)
@@ -44,44 +51,141 @@ function StockForm() {
         });
 
       await axios.get('http://localhost:3001/movcategories')
-        .then(response => {
-            for (let i = 0; i < response.data.length; i++) {
-                if (response.data[i].tipo.includes("Repuestos")) {
-                    setStockCategories(prevArray => [...prevArray, response.data[i]])
-                }                     
-            }
-        })
-        .catch(error => {
-            console.error(error)
-        })
+          .then(response => {
+              for (let i = 0; i < response.data.length; i++) {
+                  if (response.data[i].tipo.includes("Repuestos")) {
+                      setStockCategories(prevArray => [...prevArray, response.data[i]])
+                  }    
+                  if(response.data[i].categories === "Caja") {
+                      setCajaId(response.data[i].idmovcategories)
+                  } else if(response.data[i].categories === "Pesos") {
+                      setPesosId(response.data[i].idmovcategories)
+                  } else if(response.data[i].categories === "Dolares") {
+                      setusdId(response.data[i].idmovcategories)
+                  } else if(response.data[i].categories === "MercadoPago") {
+                      setmpId(response.data[i].idmovcategories)
+                  } else if(response.data[i].categories === "Banco") {
+                      setBancoId(response.data[i].idmovcategories)
+                  }                  
+              }
+          })
+          .catch(error => {
+              console.error(error)
+          })
+      await axios.get(`https://api.bluelytics.com.ar/v2/latest`)
+          .then(response => {
+              setDolar(response.data.blue.value_sell)
+          })
+          .catch(error => {
+              console.error(error)
+          })
   }
   fetchData()
 
   }, []);
 
   async function handleSubmit(event) {
-    event.preventDefault();
+      event.preventDefault();
+      try {
+          const userId = JSON.parse(localStorage.getItem("userId"))
 
-    try {
-      const formData = new FormData(event.target);
-      const stockData = {
-        repuesto_id: formData.get('repuesto_nombre'),
-        cantidad: formData.get('cantidad'),
-        precio_compra: formData.get('precio_compra'),
-        fecha_compra: formData.get('fecha_ingreso'),
-        proveedor_id: formData.get('proveedor_nombre'),
-      };
+          const formData = new FormData(event.target);
+          const stockData = {
+            repuesto_id: formData.get('repuesto_nombre'),
+            cantidad: formData.get('cantidad'),
+            precio_compra: formData.get('precio_compra'),
+            fecha_compra: formData.get('fecha_ingreso'),
+            proveedor_id: formData.get('proveedor_nombre'),
+          };
 
-      await axios.post('http://localhost:3001/stock', stockData)
-        .then(response => {
-          alert("Stock agregado correctamente")
-          window.location.reload();
-          // Aquí puedes hacer algo con la respuesta del backend, como mostrar un mensaje de éxito al usuario
+          await axios.post('http://localhost:3001/stock', stockData)
+              .then(response => {
+                alert("Stock agregado correctamente")
+                window.location.reload();
+                // Aquí puedes hacer algo con la respuesta del backend, como mostrar un mensaje de éxito al usuario
+                })
+              .catch(error => {
+                console.error(error);
+                // Aquí puedes mostrar un mensaje de error al usuario si la solicitud falla
+                });
+
+          const valueUsd = parseInt(formData.get('clienteUSD'))
+          const valuePesos = parseInt(formData.get('clientePesos'))
+          const valueTrans = parseInt(formData.get('clienteBanco'))
+          const valueMp = parseInt(formData.get('clienteMercadopago'))
+          
+          const dolarArr = [valueUsd]
+          const pesosArr = [valuePesos, valueTrans, valueMp]
+
+          const montoUSD = dolarArr.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+          const montoPesos = pesosArr.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+          const montoTotal = montoPesos + (montoUSD * dolar)
+
+          const arrayMovements = []
+
+          const gasto = formData.get('gasto')
+
+          const otherValue = document.getElementById("other").value
+          const accountValue = document.getElementById("account").value
+
+          if(montoTotal === 0){
+              return alert("Ingresar montos")
+          } else if(otherValue === "" || accountValue === ""){
+              return alert("Seleccionar cajas")
+          } else if(gasto.trim() === ""){
+              return alert("Ingresar el nombre del gasto")
+          }
+
+          const other = JSON.parse(otherValue)
+          const account = JSON.parse(accountValue)
+
+
+          // movname
+          await axios.post('http://localhost:3001/movname', {
+              ingreso: other.categories, 
+              egreso: account.categories, 
+              operacion: gasto, 
+              monto: montoTotal,
+              userId
           })
-        .catch(error => {
-          console.error(error);
-          // Aquí puedes mostrar un mensaje de error al usuario si la solicitud falla
-          });
+              .then(response => {
+                  const movNameId = response.data.insertId
+                  arrayMovements.push([other.idmovcategories, montoTotal, movNameId])
+                  //libro
+                  if(cajaId === account.idmovcategories) {
+                      if (valueUsd !== 0){
+                          arrayMovements.push([usdId, -valueUsd, movNameId])
+                      }
+                      if (valueTrans !== 0){
+                          arrayMovements.push([bancoId, -valueTrans, movNameId])
+                      }
+                      if (valuePesos !== 0){
+                          arrayMovements.push([pesosId, -valuePesos, movNameId])
+                      }
+                      if (valueMp !== 0){
+                          arrayMovements.push([mpId, -valueMp, movNameId])
+                      }
+                  } else {
+                      arrayMovements.push([account.idmovcategories, -montoTotal, movNameId])
+                  }
+              })
+              .catch(error => {
+                  console.error(error);
+              });
+
+          await axios.post('http://localhost:3001/movements', {
+              arrayInsert: arrayMovements
+          })
+              .then(response => {
+                  console.log(response)
+                  if (response.status === 200){ 
+                      alert("Pago agregado")
+                      navigate('/movements');
+                  } 
+              })
+              .catch(error => {
+                  console.error(error);
+              });
     } catch (error) {
       alert(error.response.data);
     } 
