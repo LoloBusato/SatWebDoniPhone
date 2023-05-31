@@ -59,7 +59,8 @@ function Messages() {
 
             await axios.get(`http://localhost:3001/reduceStock`)
                 .then(response => {
-                    setReduceStock(response.data)
+                    const reduceStockFilt = response.data.filter(item => item.orderid === orderId)
+                    setReduceStock(reduceStockFilt)
                 })
                 .catch(error => {
                     console.error(error)
