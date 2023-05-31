@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import NavBar from './NavBar';
+import MainNavBar from '../orders/MainNavBar';
 
 function StockForm() {
   const [proveedores, setProveedores] = useState([]);
   const [repuestos, setRepuestos] = useState([]);
   const [stock, setStock] = useState([]);
+  const [stockCategories, setStockCategories] = useState([])
 
   const navigate = useNavigate();
 
@@ -41,6 +42,18 @@ function StockForm() {
           console.error(error);
           // Aquí puedes mostrar un mensaje de error al usuario si la solicitud falla
         });
+
+      await axios.get('http://localhost:3001/movcategories')
+        .then(response => {
+            for (let i = 0; i < response.data.length; i++) {
+                if (response.data[i].tipo.includes("Repuestos")) {
+                    setStockCategories(prevArray => [...prevArray, response.data[i]])
+                }                     
+            }
+        })
+        .catch(error => {
+            console.error(error)
+        })
   }
   fetchData()
 
@@ -86,7 +99,7 @@ function StockForm() {
 
   return (
     <div className='min-h-screen'>
-      <NavBar />
+      <MainNavBar />
       <h1 className="flex justify-center text-5xl">Agregar stock</h1>
       <form onSubmit={handleSubmit} className='max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4'>
         <div className='mb-4'>
@@ -138,6 +151,59 @@ function StockForm() {
           onClick={() => { navigate(`/supplier`) }} >
               Agregar/ver proveedores
           </button>
+        </div>
+        <div className=''>
+            {/* Valores */}
+            <div className='w-full'>
+                <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Cuenta: *</label>
+                <select name="category" id="category" className='mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline' >
+                    <option value="" disabled selected>Cuenta</option>
+                    {stockCategories.map((category) => (
+                        <option key={category.idmovcategories} value={category.idmovcategories}>{category.categories}</option>
+                    ))}
+                </select>
+            </div>
+            <div className='w-full text-center'>
+                <label className="block text-gray-700 font-bold my-2 border-b-2">Monto *</label>
+                <div className='flex'>
+                    <div className='w-full'>
+                        <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Pesos:</label>
+                        <input 
+                            className="mb-2 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline" 
+                            type="text" 
+                            id="pesos" 
+                            name='pesos'
+                        />
+                    </div>     
+                    <div className='w-full'>
+                        <label className="block text-gray-700 font-bold mb-2" htmlFor="name">USD:</label>
+                        <input 
+                            className="mb-2 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline" 
+                            type="text" 
+                            id="USD" 
+                            name='USD'
+                        />
+                    </div>    
+                    <div className='w-full'>
+                        <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Banco:</label>
+                        <input 
+                            className="mb-2 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline" 
+                            type="text" 
+                            id="banco" 
+                            name='banco'
+                        />
+                    </div>
+                    <div className='w-full'>
+                        <label className="block text-gray-700 font-bold mb-2" htmlFor="name">MercadoPago:</label>
+                        <input 
+                            className="mb-2 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline" 
+                            type="text" 
+                            id="mercadopago" 
+                            name='mercadopago'
+                        />
+                    </div>                                
+                </div>
+            </div>
         </div>
         <div className='mb-4'>
           <label htmlFor="fecha_ingreso" className='block text-gray-700 font-bold mb-2'>
