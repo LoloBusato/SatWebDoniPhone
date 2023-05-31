@@ -180,7 +180,7 @@ function StockForm() {
                           arrayMovements.push([mpId, -valueMp, movNameId])
                       }
                   } else {
-                      arrayMovements.push([account.idmovcategories, -montoTotal, movNameId])
+                      arrayMovements.push([account.idmovcategories, -montoTotalUsd, movNameId])
                   }
               })
               .catch(error => {
@@ -191,7 +191,6 @@ function StockForm() {
               arrayInsert: arrayMovements
           })
               .then(response => {
-                  console.log(response)
                   if (response.status === 200){ 
                       alert("repuesto agregado")
                       navigate(`/printCode/${stockId + repuestoValue.repuesto.split(" ")[0].slice(0,2) + repuestoValue.repuesto.split(" ")[1].slice(0,1) + repuestoValue.repuesto.split(" ")[3] + repuestoValue.repuesto.split(" ")[4].slice(0,1) + stockData.fecha_compra.slice(0, 10).split("-")[0].slice(2,4) + stockData.fecha_compra.slice(0, 10).split("-")[1] + stockData.fecha_compra.slice(0, 10).split("-")[2]}`);
@@ -282,7 +281,7 @@ function StockForm() {
             {/* Valores */}
             <div className='w-full'>
                 <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Cuenta: *</label>
-                <select name="category" id="category" defaultValue={""} className='mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline' >
+                <select name="account" id="account" defaultValue={""} className='mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline' >
                     <option value="" disabled >Cuenta</option>
                     {stockCategories.map((category) => (
                         <option key={category.idmovcategories} value={JSON.stringify(category)}>{category.categories}</option>
