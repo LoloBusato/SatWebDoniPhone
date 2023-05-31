@@ -43,6 +43,7 @@ import Movements from './routes/finances/movements';
 import MovesSells from './routes/finances/movesSells';
 import MovesBranches from './routes/finances/movesBranches';
 import MovesOthers from './routes/finances/movesOthers';
+import MovesRepairs from './routes/finances/movesRepairs';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -105,6 +106,7 @@ const router = createBrowserRouter(
         <Route path= '/movessells' element= {<MovesSells /> } /> 
         <Route path= '/movesbranches' element= {<MovesBranches /> } /> 
         <Route path= '/movesothers' element= {<MovesOthers /> } /> 
+        <Route path= '/movesrepairs' element= {<MovesRepairs /> } /> 
 
       </Route>
       <Route path='/login' element={<Login />} />
