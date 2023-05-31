@@ -46,45 +46,32 @@ function StockForm() {
 
   }, []);
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
 
-    const formData = new FormData(event.target);
-    const stockData = {
-      repuesto_nombre: formData.get('repuesto_nombre'),
-      cantidad: formData.get('cantidad'),
-      precio_compra: formData.get('precio_compra'),
-      fecha_compra: formData.get('fecha_ingreso'),
-      proveedor_nombre: formData.get('proveedor_nombre'),
-    };
+    try {
+      const formData = new FormData(event.target);
+      const stockData = {
+        repuesto_id: formData.get('repuesto_nombre'),
+        cantidad: formData.get('cantidad'),
+        precio_compra: formData.get('precio_compra'),
+        fecha_compra: formData.get('fecha_ingreso'),
+        proveedor_id: formData.get('proveedor_nombre'),
+      };
 
-    axios.get(`http://localhost:3001/supplier/${stockData.proveedor_nombre}`)
-      .then(response => {
-        const proveedorId = response.data;
-        stockData.proveedor_id = proveedorId;
-
-        axios.get(`http://localhost:3001/stock/item/${stockData.repuesto_nombre}`)
-          .then(info => {
-            const repuestoId = info.data;
-            stockData.repuesto_id = repuestoId;
-
-            axios.post('http://localhost:3001/stock', stockData)
-              .then(response => {
-                alert("Stock agregado correctamente")
-                window.location.reload();
-                // Aquí puedes hacer algo con la respuesta del backend, como mostrar un mensaje de éxito al usuario
-                })
-              .catch(error => {
-                console.error(error);
-                // Aquí puedes mostrar un mensaje de error al usuario si la solicitud falla
-                });
-        })
-
-      })
-      .catch(error => {
-        console.error(error);
-        // Aquí puedes mostrar un mensaje de error al usuario si la solicitud falla
-      });
+      await axios.post('http://localhost:3001/stock', stockData)
+        .then(response => {
+          alert("Stock agregado correctamente")
+          window.location.reload();
+          // Aquí puedes hacer algo con la respuesta del backend, como mostrar un mensaje de éxito al usuario
+          })
+        .catch(error => {
+          console.error(error);
+          // Aquí puedes mostrar un mensaje de error al usuario si la solicitud falla
+          });
+    } catch (error) {
+      alert(error.response.data);
+    } 
   }
 
   const eliminarElemento = async (id) => {
@@ -109,7 +96,7 @@ function StockForm() {
           <div className='relative'>
             <select name="repuesto_nombre" className="mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline">
               {repuestos.map((repuesto) => (
-                <option key={repuesto.idrepuestos} value={repuesto.repuesto}>{repuesto.repuesto}</option>
+                <option key={repuesto.idrepuestos} value={repuesto.idrepuestos}>{repuesto.repuesto}</option>
               ))}
             </select>
             <div className='pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700'>
@@ -140,7 +127,7 @@ function StockForm() {
           <div className='relative'>
             <select name="proveedor_nombre" className="mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline">
               {proveedores.map(proveedor => (
-                <option key={proveedor.idproveedores} value={proveedor.nombre}>{proveedor.nombre}</option>
+                <option key={proveedor.idproveedores} value={proveedor.idproveedores}>{proveedor.nombre}</option>
               ))}
             </select>
             <div className='pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700'>
