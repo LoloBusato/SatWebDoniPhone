@@ -106,7 +106,7 @@ const router = createBrowserRouter(
         <Route path= '/movessells' element= {<MovesSells /> } /> 
         <Route path= '/movesbranches' element= {<MovesBranches /> } /> 
         <Route path= '/movesothers' element= {<MovesOthers /> } /> 
-        <Route path= '/movesrepairs' element= {<MovesRepairs /> } /> 
+        <Route path= '/movesrepairs/:id' element= {<MovesRepairs /> } /> 
 
       </Route>
       <Route path='/login' element={<Login />} />
