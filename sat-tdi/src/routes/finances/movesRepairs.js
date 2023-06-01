@@ -83,7 +83,6 @@ function MovesRepairs() {
             const formData = new FormData(event.target);
 
             const cuentaVuelto = parseInt(document.getElementById("cuenta").value)
-            const device = JSON.parse(document.getElementById("device").value)
 
             const valueUsd = parseInt(formData.get('clienteUSD'))
             const valuePesos = parseInt(formData.get('clientePesos'))
@@ -118,8 +117,8 @@ function MovesRepairs() {
                 .then(response => {
                     const movNameId = response.data.insertId
                     arrayMovements.push([reparacionesId, -montoTotal, movNameId])
-                    arrayMovements.push([cmvId, parseFloat(device.precio_compra), movNameId])
-                    arrayMovements.push([repuestosId, -parseFloat(device.precio_compra), movNameId])
+                    arrayMovements.push([cmvId, parseFloat(valorRepuestosUsd), movNameId])
+                    arrayMovements.push([repuestosId, -parseFloat(valorRepuestosUsd), movNameId])
                     //libro
                     if (valueUsd !== 0){
                         arrayMovements.push([usdId, valueUsd, movNameId])
@@ -156,28 +155,20 @@ function MovesRepairs() {
                 .catch(error => {
                     console.error(error);
                 });
-            
-            const responseReduce = await axios.post(`http://localhost:3001/reduceStock`, {
-                cantidad: (device.cantidad - 1),
-                stockId: device.idstock,
-                orderId: null,
-                userId,
+
+            await axios.post('http://localhost:3001/movements', {
+                arrayInsert: arrayMovements
             })
-            if(responseReduce.status === 200) {
-                await axios.post('http://localhost:3001/movements', {
-                    arrayInsert: arrayMovements
+                .then(response => {
+                    console.log(response)
+                    if (response.status === 200){ 
+                        alert("Reparacion cobrada")
+                        navigate(`/home`);
+                    } 
                 })
-                    .then(response => {
-                        console.log(response)
-                        if (response.status === 200){ 
-                            alert("Venta agregada")
-                            navigate('/movements');
-                        } 
-                    })
-                    .catch(error => {
-                        console.error(error);
-                    });
-            }
+                .catch(error => {
+                    console.error(error);
+                });
         } catch (error) {
             alert(error.response.data);
         }
@@ -315,6 +306,14 @@ function MovesRepairs() {
                                 </div>
                             </div>
                         </div>
+                        <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                            Guardar
+                        </button>
+                        <button 
+                            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                            onClick={() => { navigate(`/home`) }} >
+                                Volver
+                        </button>
                     </form>
                 </div>
             </div>
