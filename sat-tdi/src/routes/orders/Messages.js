@@ -164,6 +164,11 @@ function Messages() {
                         <div>
                             <button 
                             className="bg-white text-black font-medium my-1 px-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                            onClick={() => { navigate(`/movesrepairs/${order.order_id}`) }}>
+                                Cobrar
+                            </button>
+                            <button 
+                            className="bg-white text-black font-medium my-1 px-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                             onClick={() => { navigate(`/printOrder/${order.order_id}`) }}>
                                 Imprimir
                             </button>
