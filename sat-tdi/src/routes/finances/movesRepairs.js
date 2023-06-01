@@ -101,6 +101,10 @@ function MovesRepairs() {
             const montoPesos = pesosArr.reduce((accumulator, currentValue) => accumulator + currentValue, 0)
             const montoTotal = montoPesos + (montoUSD * dolar)
 
+            if(montoTotal === 0){
+                return alert("Agregar pago")
+            }
+
             const arrayMovements = []
 
             // movname
