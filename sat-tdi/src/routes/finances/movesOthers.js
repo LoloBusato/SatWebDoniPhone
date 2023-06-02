@@ -177,10 +177,6 @@ function MovesOthers() {
                                             <option key={category.idmovcategories} value={JSON.stringify(category)}>{category.categories}</option>
                                         ))}
                                     </select>
-                                    <button
-                                    onClick={handleNewCategory}>
-                                        Agregar categoria
-                                    </button>
                                 </div>
                                 <div className='w-full'>
                                     <label className="block text-gray-700 font-bold mb-2">Gasto: *</label>
