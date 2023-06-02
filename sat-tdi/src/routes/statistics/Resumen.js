@@ -1,25 +1,18 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
 import MainNavBar from '../orders/MainNavBar';
 
 function Resumen() {
 
     const [allMovements, setAllMovements] = useState([])
     const [movname, setMovname] = useState([])
+    const [categoriesDicc, setCategoriesDicc] = useState([])
 
-    const [selectMovements, setSelectMovements] = useState([]);
-    const [idSelectMovement, setIdSelectMovement] = useState(null);
-
-    const [searchMovname, setsearchMovname] = useState([]);
     const [fechaInicioSearch, setFechaInicioSearch] = useState("");
     const [fechaFinSearch, setFechaFinSearch] = useState("");
 
-    const navigate = useNavigate();
-
     useEffect(() => {
         const fetchStates = async () => {
-
             await axios.get(`http://localhost:3001/movements`)
                 .then(response => {
                   setAllMovements(response.data)
@@ -31,7 +24,18 @@ function Resumen() {
             await axios.get(`http://localhost:3001/movname`)
                 .then(response => {
                     setMovname(response.data)
-                    setsearchMovname(response.data)
+                })
+                .catch(error => {
+                    console.error(error)
+                })
+
+            await axios.get('http://localhost:3001/movcategories')
+                .then(response => {
+                    const categories = {}
+                    for (let i = 0; i < response.data.length; i++) {
+                        categories[response.data[i].categories] = 0;
+                    }
+                    setCategoriesDicc(categories)
                 })
                 .catch(error => {
                     console.error(error)
@@ -40,9 +44,15 @@ function Resumen() {
         fetchStates()
     }, []);
 
-    async function handleSearch (event) {
+    const handleSearch = (event) => {
         event.preventDefault();
-        await setsearchMovname(movname.filter((item) => {
+        const parcialdicc = {}
+        for (const clave in categoriesDicc) {
+            if (categoriesDicc.hasOwnProperty(clave)) {
+                parcialdicc[clave] = 0;
+            }
+        }
+        movname.forEach((item) => {
             const fecha = item.fecha.split("/")
             const createdAt = new Date(`${fecha[1]}-${fecha[0]}-${fecha[2]}`);
             const start = fechaInicioSearch.split("/")
@@ -53,28 +63,15 @@ function Resumen() {
             // Verificar si la fecha está dentro del rango
             const isWithinRangeDate = (!startDate || createdAt >= startDate) && (!endDate || createdAt <= endDate);
 
-            return (
-                isWithinRangeDate
-            )
-        }));
-        console.log(searchMovname)
-    };
-
-    const obtenerMovimientos = (id) => {
-      const movimientosFiltrados = allMovements.filter(
-        (movimiento) => movimiento.movname_id === id
-      );
-        setSelectMovements(movimientosFiltrados);
-    };
-
-    const handleRowClick = (id) => {
-      if (idSelectMovement === id) {
-        setIdSelectMovement(null);
-        setSelectMovements([]);
-      } else {
-        obtenerMovimientos(id);
-        setIdSelectMovement(id);
-      }
+            if (isWithinRangeDate) {
+                allMovements.forEach((movement) => {
+                    if(movement.movname_id === item.idmovname){
+                        parcialdicc[movement.categories] += movement.unidades;
+                    }
+                })
+            }
+        });
+        setCategoriesDicc(parcialdicc)
     };
 
     return (
@@ -82,10 +79,10 @@ function Resumen() {
             <MainNavBar />
             <div className="bg-white my-2 px-2 max-w-7xl mx-auto">
               <div className='text-center'>
-                <h1 className="text-5xl font-bold py-8">Libro contable</h1>
+                <h1 className="text-5xl font-bold py-8">Resumen</h1>
                 <div className="border border-gray-300">
                     <form onSubmit={handleSearch} className="p-1 bg-blue-100">
-                        <div className='grid grid-cols-3 gap-y-1'>
+                        <div className='grid grid-cols-2 gap-y-1'>
                             <div className='flex justify-end w-5/6 gap-x-2'>
                                 <label>Fecha Inicio </label>
                                 <input
@@ -114,78 +111,35 @@ function Resumen() {
                         </div>
                     </form>
                 </div>
-                <table className="mt-4 w-full">
-                  <thead>
-                    <tr>
-                      <th className="px-4 py-2 border border-black">(dd/mm/yy)</th>
-                      <th className="px-4 py-2 border border-black">Ingreso</th>
-                      <th className="px-4 py-2 border border-black">Operación</th>
-                      <th className="px-4 py-2 border border-black">Egreso</th>
-                      <th className="px-4 py-2 border border-black">Monto</th>
-                      <th className="px-4 py-2 border border-black">Usuario</th>
-                      <th className="px-4 py-2 border border-black">Editar</th>
-                      <th className="px-4 py-2 border border-black">Eliminar</th>
-                    </tr>
-                  </thead>
-                  <tbody className='text-center'>
-                    {searchMovname.map((row) => (
-                      <React.Fragment key={row.idmovname}>
-                        <tr
-                          className="cursor-pointer hover:bg-gray-100 border border-black"
-                          onClick={() => handleRowClick(row.idmovname)}
-                        >
-                          <td className="px-4 py-2">{row.fecha}</td>
-                          <td className="px-4 py-2">{row.ingreso}</td>
-                          <td className="px-4 py-2">{row.operacion}</td>
-                          <td className="px-4 py-2">{row.egreso}</td>
-                          <td className="px-4 py-2">{row.monto}</td>
-                          <td className="px-4 py-2">{row.username}</td>
-                          <td className="px-4 py-2">
-                            <button
-                            onClick={() => {navigate('/home')}}
-                            className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded"
-                            >
-                              Editar
-                            </button>
-                          </td>
-                          <td className="px-4 py-2">
-                            <button
-                            onClick={() => {navigate('/home')}}
-                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
-                            >
-                              Eliminar
-                            </button>
-                          </td>
-                        </tr>
-                        {/* Renderiza la tabla de movimientos si el movimiento está seleccionado */}
-                        {idSelectMovement === row.idmovname && (
-                          <tr className='bg-gray-300 border border-black'>
-                            <td colSpan="3"></td>
-                            <td colSpan="3">
-                              <table className="my-2 w-full border border-black bg-white">
-                                <thead>
-                                  <tr>
-                                    <th className="px-4 py-2 border border-black">Categoría</th>
-                                    <th className="px-4 py-2 border border-black">Cantidad</th>
-                                  </tr>
-                                </thead>
-                                <tbody className='text-center'>
-                                  {selectMovements.map((movimiento) => (
-                                    <tr key={movimiento.idmovements}>
-                                      <td className="px-4 py-2 border border-black">{movimiento.categories}</td>
-                                      <td className="px-4 py-2 border border-black">{movimiento.unidades}</td>
-                                    </tr>
-                                  ))}
-                                </tbody>
-                              </table>
-                            </td>
-                            <td colSpan="2"></td>
-                          </tr>
-                        )}
-                      </React.Fragment>
+                <div className='grid grid-cols-3'>
+                    {Object.entries(categoriesDicc).map(([key, value]) => (
+                        <div key={key} className='flex flex-col border border-black'>
+                            <span className='font-bold'>{key}: </span>
+                            <span>{value}</span>
+                        </div>
                     ))}
-                  </tbody>
-                </table>
+                </div>
+                <div>
+                    <h1>Caja</h1>
+                    <div className='flex'>
+                        <div>
+                            <h1>Pesos</h1>
+                            <h1>{categoriesDicc.Pesos}</h1>
+                        </div>
+                        <div>
+                            <h1>Dolares</h1>
+                            <h1>{categoriesDicc.Dolares}</h1>
+                        </div>
+                        <div>
+                            <h1>Banco</h1>
+                            <h1>{categoriesDicc.Banco}</h1>
+                        </div>
+                        <div>
+                            <h1>Mercado Pago</h1>
+                            <h1>{categoriesDicc.MercadoPago}</h1>
+                        </div>
+                    </div>
+                </div>
               </div>
             </div>
         </div>
