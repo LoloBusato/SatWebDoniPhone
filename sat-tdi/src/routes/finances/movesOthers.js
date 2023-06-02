@@ -144,11 +144,6 @@ function MovesOthers() {
             alert(error.response.data);
         }
     }
-    
-    async function handleNewCategory(event) {
-        event.preventDefault();
-        
-    }
 
     return (
         <div className='bg-gray-300 min-h-screen pb-2'>
