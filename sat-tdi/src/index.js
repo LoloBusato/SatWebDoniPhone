@@ -46,6 +46,7 @@ import MovesOthers from './routes/finances/movesOthers';
 import MovesRepairs from './routes/finances/movesRepairs';
 import MovCategories from './routes/finances/movcategories';
 import Resumen from './routes/statistics/Resumen';
+import CreateGroups from './routes/login/CreateGroups';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -77,6 +78,7 @@ const router = createBrowserRouter(
 
         {/* Rutas para agregar usuarios */}
         <Route path= '/createUser' element= {<CreateUser /> }/>
+        <Route path= '/createGroups' element= {<CreateGroups /> }/>
         <Route path= '/updateUser/:id' element= {<UpdateUser /> }/>  
 
         {/* Rutas para agregar clientes */}

@@ -81,7 +81,7 @@ const MainNavBar = () => {
                         Configuracion 
                         <ul className={`w-full absolute bg-gray-700 text-white left-0 ${expandedConfig ? 'block' : 'hidden'}`}>
                             <Link to='/createUser'><li className='border-t'>Usuarios</li></Link>
-                            <Link to='/createUser'><li className='border-t'>Grupos de usuarios</li></Link>
+                            <Link to='/createGroups'><li className='border-t'>Grupos de usuarios</li></Link>
                             <Link to='/branches'><li className='border-t'>Sucursales</li></Link>
                         </ul>
                     </li>
