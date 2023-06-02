@@ -7,7 +7,6 @@ function Statistics() {
 
     const [movements, setMovements] = useState([])
     const [movname, setMovname] = useState([])
-    const [dolar, setDolar] = useState(500)
 
     const [movimientos, setMovimientos] = useState([]);
     const [movimientoSeleccionado, setMovimientoSeleccionado] = useState(null);
@@ -17,13 +16,6 @@ function Statistics() {
 
     useEffect(() => {
         const fetchStates = async () => {
-            await axios.get(`https://api.bluelytics.com.ar/v2/latest`)
-                .then(response => {
-                    setDolar(response.data.blue.value_sell)
-                })
-                .catch(error => {
-                    console.error(error)
-                })
 
             await axios.get(`http://localhost:3001/movements`)
                 .then(response => {
@@ -73,25 +65,27 @@ function Statistics() {
     return (
         <div className='bg-gray-300 min-h-screen pb-2'>
             <MainNavBar />
-            <div className="bg-white my-2 py-8 px-2 max-w-6xl mx-auto">
-              <div>
-                <h1 className="text-xl font-bold">Información principal</h1>
+            <div className="bg-white my-2 px-2 max-w-7xl mx-auto">
+              <div className='text-center'>
+                <h1 className="text-5xl font-bold py-8">Libro contable</h1>
                 <table className="mt-4 w-full">
                   <thead>
                     <tr>
-                      <th className="px-4 py-2">Fecha (dd/mm/yy)</th>
-                      <th className="px-4 py-2">Ingreso</th>
-                      <th className="px-4 py-2">Operación</th>
-                      <th className="px-4 py-2">Egreso</th>
-                      <th className="px-4 py-2">Monto</th>
-                      <th className="px-4 py-2">Usuario</th>
+                      <th className="px-4 py-2 border border-black">(dd/mm/yy)</th>
+                      <th className="px-4 py-2 border border-black">Ingreso</th>
+                      <th className="px-4 py-2 border border-black">Operación</th>
+                      <th className="px-4 py-2 border border-black">Egreso</th>
+                      <th className="px-4 py-2 border border-black">Monto</th>
+                      <th className="px-4 py-2 border border-black">Usuario</th>
+                      <th className="px-4 py-2 border border-black">Editar</th>
+                      <th className="px-4 py-2 border border-black">Eliminar</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody className='text-center'>
                     {movname.map((row) => (
                       <React.Fragment key={row.idmovname}>
                         <tr
-                          className="cursor-pointer hover:bg-gray-100"
+                          className="cursor-pointer hover:bg-gray-100 border border-black"
                           onClick={() => handleRowClick(row.idmovname)}
                         >
                           <td className="px-4 py-2">{row.fecha}</td>
@@ -100,28 +94,46 @@ function Statistics() {
                           <td className="px-4 py-2">{row.egreso}</td>
                           <td className="px-4 py-2">{row.monto}</td>
                           <td className="px-4 py-2">{row.username}</td>
+                          <td className="px-4 py-2">
+                            <button
+                            onClick={() => {navigate('/home')}}
+                            className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded"
+                            >
+                              Editar
+                            </button>
+                          </td>
+                          <td className="px-4 py-2">
+                            <button
+                            onClick={() => {navigate('/home')}}
+                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+                            >
+                              Eliminar
+                            </button>
+                          </td>
                         </tr>
                         {/* Renderiza la tabla de movimientos si el movimiento está seleccionado */}
                         {movimientoSeleccionado === row.idmovname && (
-                          <tr>
-                            <td colSpan="6">
-                              <table className="mt-2 w-full">
+                          <tr className='bg-gray-300 border border-black'>
+                            <td colSpan="3"></td>
+                            <td colSpan="3">
+                              <table className="my-2 w-full border border-black bg-white">
                                 <thead>
                                   <tr>
-                                    <th className="px-4 py-2">Categoría</th>
-                                    <th className="px-4 py-2">Cantidad</th>
+                                    <th className="px-4 py-2 border border-black">Categoría</th>
+                                    <th className="px-4 py-2 border border-black">Cantidad</th>
                                   </tr>
                                 </thead>
-                                <tbody>
+                                <tbody className='text-center'>
                                   {movimientos.map((movimiento) => (
                                     <tr key={movimiento.idmovements}>
-                                      <td className="px-4 py-2">{movimiento.categories}</td>
-                                      <td className="px-4 py-2">{movimiento.unidades}</td>
+                                      <td className="px-4 py-2 border border-black">{movimiento.categories}</td>
+                                      <td className="px-4 py-2 border border-black">{movimiento.unidades}</td>
                                     </tr>
                                   ))}
                                 </tbody>
                               </table>
                             </td>
+                            <td colSpan="2"></td>
                           </tr>
                         )}
                       </React.Fragment>
