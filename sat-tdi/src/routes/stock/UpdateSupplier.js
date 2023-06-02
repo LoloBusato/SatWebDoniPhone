@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from "react-router-dom";
-import NavBar from './NavBar';
+import MainNavBar from '../orders/MainNavBar';
 
 function UpdateSupplier() {
 
@@ -48,53 +48,57 @@ function UpdateSupplier() {
     }
 
   return (
-    <div className="mx-auto min-h-screen">
-      <NavBar />
-      <h1 className="flex justify-center text-5xl">Editar proveedor</h1>
-      <form onSubmit={handleSubmit} className="max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <div className="flex flex-col mb-4">
-          <label htmlFor="proveedor_nombre" className="text-lg mb-2">
-            Nombre del proveedor: *
-          </label>
-          <input
-            type="text"
-            name="proveedor_nombre"
-            id="proveedor_nombre"
-            className="border border-gray-400 p-2"
-          />
+    <div className="bg-gray-300 min-h-screen pb-2">
+      <MainNavBar />
+      <div className='bg-white m-2 py-8 px-2'>
+        <h1 className="text-center text-5xl">Editar proveedor</h1>
+        <div>
+          <form onSubmit={handleSubmit} className="max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <div className="flex flex-col mb-4">
+              <label htmlFor="proveedor_nombre" className="text-lg mb-2">
+                Nombre del proveedor: *
+              </label>
+              <input
+                type="text"
+                name="proveedor_nombre"
+                id="proveedor_nombre"
+                className="border border-gray-400 p-2"
+              />
+            </div>
+            <div className="flex flex-col mb-4">
+              <label htmlFor="telefono" className="text-lg mb-2">
+                Número de teléfono: *
+              </label>
+              <input
+                type="number"
+                name="telefono"
+                id="telefono"
+                className="border border-gray-400 p-2"
+              />
+            </div>
+            <div className="flex flex-col mb-4">
+              <label htmlFor="direccion" className="text-lg mb-2">
+                Dirección: (opcional)
+              </label>
+              <input
+                type="text"
+                name="direccion"
+                id="direccion"
+                className="border border-gray-400 p-2"
+              />
+            </div>
+            <div className='flex items-center justify-between'>
+                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded" >
+                    Guardar
+                </button>
+                <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                onClick={() => { navigate(`/supplier`) }} >
+                    Volver
+                </button>
+            </div>
+          </form>
         </div>
-        <div className="flex flex-col mb-4">
-          <label htmlFor="telefono" className="text-lg mb-2">
-            Número de teléfono: *
-          </label>
-          <input
-            type="number"
-            name="telefono"
-            id="telefono"
-            className="border border-gray-400 p-2"
-          />
-        </div>
-        <div className="flex flex-col mb-4">
-          <label htmlFor="direccion" className="text-lg mb-2">
-            Dirección: (opcional)
-          </label>
-          <input
-            type="text"
-            name="direccion"
-            id="direccion"
-            className="border border-gray-400 p-2"
-          />
-        </div>
-        <div className='flex items-center justify-between'>
-            <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded" >
-                Guardar
-            </button>
-            <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            onClick={() => { navigate(`/supplier`) }} >
-                Volver
-            </button>
-        </div>
-      </form>
+      </div>
     </div>
   );
 }

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from "react-router-dom";
-import NavBar from './NavBar';
 import MainNavBar from '../orders/MainNavBar';
 
 
@@ -99,7 +98,7 @@ function UpdateStock() {
   return (
     <div className='bg-gray-300 min-h-screen pb-2'>
       <MainNavBar />
-      <div>
+      <div className='bg-white m-2 py-8 px-2'>
         <h1 className="text-center text-5xl">Modificar stock</h1>
         <div>
           <form onSubmit={handleSubmit} className='max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4'>
