@@ -214,165 +214,169 @@ function StockForm() {
   }
 
   return (
-    <div className='min-h-screen'>
+    <div className='bg-gray-300 min-h-screen pb-2'>
       <MainNavBar />
-      <h1 className="flex justify-center text-5xl">Agregar stock</h1>
-      <form onSubmit={handleSubmit} className='max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4'>
-        <div className='mb-4'>
-          <label htmlFor="input" className='block text-gray-700 font-bold mb-2'>
-            Repuesto:
-          </label>
-          <div className='relative'>
-            <select name="repuesto" id="repuesto" defaultValue="" className="mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline">
-              <option value="" disabled >Repuesto</option>
-              {repuestos.map((repuesto) => (
-                <option key={repuesto.idrepuestos} value={JSON.stringify(repuesto)}>{repuesto.repuesto}</option>
-              ))}
-            </select>
-            <div className='pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700'>
-              <svg className='fill-current h-4 w-4' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path d='M10 12a2 2 0 100-4 2 2 0 000 4z'/></svg>
-            </div>
-          </div>
-          <button className="mt-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          onClick={() => { navigate(`/items`) }} >
-              Agregar productos
-          </button>
-        </div>
-        <div className='mb-4'>
-          <label htmlFor="cantidad" className='block text-gray-700 font-bold mb-2'>
-            Cantidad:
-          </label>
-          <input type="number" name="cantidad" className="mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline" />
-        </div>
-        <div className='mb-4'>
-          <label htmlFor="cantidad_limite" className='block text-gray-700 font-bold mb-2'>
-            Cantidad para avisar:
-          </label>
-          <input type="number" name="cantidad_limite" className="mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline" />
-        </div>
-        <div className='mb-4'>
-          <label htmlFor="precio_compra" className='block text-gray-700 font-bold mb-2'>
-            Precio de compra (USD):
-          </label>
-          <input type="number" step='0.01' min='0' name="precio_compra" className="mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline" />
-        </div>
-        <div className='mb-4'>
-          <label htmlFor="proveedor_nombre" className='block text-gray-700 font-bold mb-2'>
-            Proveedor:
-          </label>
-          <div className='relative'>
-            <select name="proveedor_nombre" defaultValue="" className="mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline">
-              <option value="" disabled >Proveedor</option>
-              {proveedores.map(proveedor => (
-                <option key={proveedor.idproveedores} value={proveedor.idproveedores}>{proveedor.nombre}</option>
-              ))}
-            </select>
-            <div className='pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700'>
-              <svg className='fill-current h-4 w-4' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path d='M10 12a2 2 0 100-4 2 2 0 000 4z'/></svg>
-            </div>
-          </div>
-          <button className="mt-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          onClick={() => { navigate(`/supplier`) }} >
-              Agregar/ver proveedores
-          </button>
-        </div>
-        <div className=''>
-            {/* Valores */}
-            <div className='w-full'>
-                <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Cuenta: *</label>
-                <select name="account" id="account" defaultValue={""} className='mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline' >
-                    <option value="" disabled >Cuenta</option>
-                    {stockCategories.map((category) => (
-                        <option key={category.idmovcategories} value={JSON.stringify(category)}>{category.categories}</option>
-                    ))}
+      <div className='bg-white m-2 py-8 px-2'>
+        <h1 className="text-center text-5xl">Agregar stock</h1>
+        <div>
+          <form onSubmit={handleSubmit} className='max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4'>
+            <div className='mb-4'>
+              <label htmlFor="input" className='block text-gray-700 font-bold mb-2'>
+                Repuesto:
+              </label>
+              <div className='relative'>
+                <select name="repuesto" id="repuesto" defaultValue="" className="mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline">
+                  <option value="" disabled >Repuesto</option>
+                  {repuestos.map((repuesto) => (
+                    <option key={repuesto.idrepuestos} value={JSON.stringify(repuesto)}>{repuesto.repuesto}</option>
+                  ))}
                 </select>
+                <div className='pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700'>
+                  <svg className='fill-current h-4 w-4' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path d='M10 12a2 2 0 100-4 2 2 0 000 4z'/></svg>
+                </div>
+              </div>
+              <button className="mt-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={() => { navigate(`/items`) }} >
+                  Agregar productos
+              </button>
             </div>
-            <div className='w-full text-center'>
-                <label className="block text-gray-700 font-bold my-2 border-b-2">Monto *</label>
-                <div className='flex'>
-                    <div className='w-full'>
-                        <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Pesos:</label>
-                        <input 
-                            className="mb-2 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline" 
-                            type="text" 
-                            id="pesos" 
-                            name='pesos'
-                        />
-                    </div>     
-                    <div className='w-full'>
-                        <label className="block text-gray-700 font-bold mb-2" htmlFor="name">USD:</label>
-                        <input 
-                            className="mb-2 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline" 
-                            type="text" 
-                            id="USD" 
-                            name='USD'
-                        />
-                    </div>    
-                    <div className='w-full'>
-                        <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Banco:</label>
-                        <input 
-                            className="mb-2 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline" 
-                            type="text" 
-                            id="banco" 
-                            name='banco'
-                        />
+            <div className='mb-4'>
+              <label htmlFor="cantidad" className='block text-gray-700 font-bold mb-2'>
+                Cantidad:
+              </label>
+              <input type="number" name="cantidad" className="mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline" />
+            </div>
+            <div className='mb-4'>
+              <label htmlFor="cantidad_limite" className='block text-gray-700 font-bold mb-2'>
+                Cantidad para avisar:
+              </label>
+              <input type="number" name="cantidad_limite" className="mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline" />
+            </div>
+            <div className='mb-4'>
+              <label htmlFor="precio_compra" className='block text-gray-700 font-bold mb-2'>
+                Precio de compra (USD):
+              </label>
+              <input type="number" step='0.01' min='0' name="precio_compra" className="mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline" />
+            </div>
+            <div className='mb-4'>
+              <label htmlFor="proveedor_nombre" className='block text-gray-700 font-bold mb-2'>
+                Proveedor:
+              </label>
+              <div className='relative'>
+                <select name="proveedor_nombre" defaultValue="" className="mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline">
+                  <option value="" disabled >Proveedor</option>
+                  {proveedores.map(proveedor => (
+                    <option key={proveedor.idproveedores} value={proveedor.idproveedores}>{proveedor.nombre}</option>
+                  ))}
+                </select>
+                <div className='pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700'>
+                  <svg className='fill-current h-4 w-4' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path d='M10 12a2 2 0 100-4 2 2 0 000 4z'/></svg>
+                </div>
+              </div>
+              <button className="mt-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={() => { navigate(`/supplier`) }} >
+                  Agregar/ver proveedores
+              </button>
+            </div>
+            <div className=''>
+                {/* Valores */}
+                <div className='w-full'>
+                    <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Cuenta: *</label>
+                    <select name="account" id="account" defaultValue={""} className='mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline' >
+                        <option value="" disabled >Cuenta</option>
+                        {stockCategories.map((category) => (
+                            <option key={category.idmovcategories} value={JSON.stringify(category)}>{category.categories}</option>
+                        ))}
+                    </select>
+                </div>
+                <div className='w-full text-center'>
+                    <label className="block text-gray-700 font-bold my-2 border-b-2">Monto *</label>
+                    <div className='flex'>
+                        <div className='w-full'>
+                            <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Pesos:</label>
+                            <input 
+                                className="mb-2 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline" 
+                                type="text" 
+                                id="pesos" 
+                                name='pesos'
+                            />
+                        </div>     
+                        <div className='w-full'>
+                            <label className="block text-gray-700 font-bold mb-2" htmlFor="name">USD:</label>
+                            <input 
+                                className="mb-2 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline" 
+                                type="text" 
+                                id="USD" 
+                                name='USD'
+                            />
+                        </div>    
+                        <div className='w-full'>
+                            <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Banco:</label>
+                            <input 
+                                className="mb-2 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline" 
+                                type="text" 
+                                id="banco" 
+                                name='banco'
+                            />
+                        </div>
+                        <div className='w-full'>
+                            <label className="block text-gray-700 font-bold mb-2" htmlFor="name">MercadoPago:</label>
+                            <input 
+                                className="mb-2 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline" 
+                                type="text" 
+                                id="mercadopago" 
+                                name='mercadopago'
+                            />
+                        </div>                                
                     </div>
-                    <div className='w-full'>
-                        <label className="block text-gray-700 font-bold mb-2" htmlFor="name">MercadoPago:</label>
-                        <input 
-                            className="mb-2 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline" 
-                            type="text" 
-                            id="mercadopago" 
-                            name='mercadopago'
-                        />
-                    </div>                                
                 </div>
             </div>
+            <div className='mb-4'>
+              <label htmlFor="fecha_ingreso" className='block text-gray-700 font-bold mb-2'>
+                Fecha de compra:
+              </label>
+              <input type="date" name="fecha_ingreso" id="fecha_ingreso" defaultValue="" className="mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline" />
+            </div>
+            <div className='flex items-center justify-center px-10'>
+              <button type="submit" className='bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded'>
+                Guardar
+              </button>
+            </div>
+          </form>
+          <div className="flex justify-center mb-10">
+            <table className="table-auto">
+              <thead>
+                <tr>
+                  <th className="px-4 py-2">Repuesto</th>
+                  <th className="px-4 py-2">Cantidad</th>
+                  <th className="px-4 py-2">Precio</th>
+                  <th className="px-4 py-2">Proveedor</th>
+                  <th className="px-4 py-2">Fecha (aaaa/mm/dd)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {stock.map(stock => (
+                  <tr key={stock.idstock}>
+                    <td className="border px-4 py-2" value={stock.repuesto}>{stock.repuesto}</td>
+                    <td className="border px-4 py-2" value={stock.cantidad}>{stock.cantidad}</td>
+                    <td className="border px-4 py-2" value={stock.precio_compra}>{stock.precio_compra} USD</td>
+                    <td className="border px-4 py-2" value={stock.nombre}>{stock.nombre}</td>
+                    <td className="border px-4 py-2" value={stock.fecha_compra}>{stock.fecha_compra.slice(0, 10)}</td>
+                    <td>
+                      <button className="bg-red-500 border px-4 py-2 color" onClick={() => eliminarElemento(stock.idstock)}>Eliminar</button>
+                    </td>
+                    <td>
+                      <button className="bg-green-500 border px-4 py-2 color"
+                      onClick={() => { navigate(`/updateStock/${stock.idstock}`) }} >
+                          Editar
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-        <div className='mb-4'>
-          <label htmlFor="fecha_ingreso" className='block text-gray-700 font-bold mb-2'>
-            Fecha de compra:
-          </label>
-          <input type="date" name="fecha_ingreso" id="fecha_ingreso" defaultValue="" className="mt-1 appearance-none w-full px-3 py-2 rounded-md border border-gray-400 shadow-sm leading-tight focus:outline-none focus:shadow-outline" />
-        </div>
-        <div className='flex items-center justify-center px-10'>
-          <button type="submit" className='bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded'>
-            Guardar
-          </button>
-        </div>
-      </form>
-      <div className="flex justify-center mb-10">
-        <table className="table-auto">
-          <thead>
-            <tr>
-              <th className="px-4 py-2">Repuesto</th>
-              <th className="px-4 py-2">Cantidad</th>
-              <th className="px-4 py-2">Precio</th>
-              <th className="px-4 py-2">Proveedor</th>
-              <th className="px-4 py-2">Fecha (aaaa/mm/dd)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {stock.map(stock => (
-              <tr key={stock.idstock}>
-                <td className="border px-4 py-2" value={stock.repuesto}>{stock.repuesto}</td>
-                <td className="border px-4 py-2" value={stock.cantidad}>{stock.cantidad}</td>
-                <td className="border px-4 py-2" value={stock.precio_compra}>{stock.precio_compra} USD</td>
-                <td className="border px-4 py-2" value={stock.nombre}>{stock.nombre}</td>
-                <td className="border px-4 py-2" value={stock.fecha_compra}>{stock.fecha_compra.slice(0, 10)}</td>
-                <td>
-                  <button className="bg-red-500 border px-4 py-2 color" onClick={() => eliminarElemento(stock.idstock)}>Eliminar</button>
-                </td>
-                <td>
-                  <button className="bg-green-500 border px-4 py-2 color"
-                  onClick={() => { navigate(`/updateStock/${stock.idstock}`) }} >
-                      Editar
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
       </div>
     </div>
   );
