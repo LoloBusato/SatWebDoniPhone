@@ -121,52 +121,94 @@ function Resumen() {
                         </div>
                     </form>
                 </div>
-                <div className='grid grid-cols-3'>
-                    {Object.entries(categoriesDicc).map(([key, value]) => (
-                        <div key={key} className='flex flex-col border border-black'>
-                            <span className='font-bold'>{key}: </span>
-                            <span>{value}</span>
-                        </div>
-                    ))}
-                </div>
-                {/* Caja */}
-                <div>
-                    <h1>Caja</h1>
-                    <div className='grid grid-cols-4'>
-                        <div className='border border-black'>
-                            <h1>Pesos</h1>
-                            <h1>{categoriesDicc.Pesos}</h1>
-                        </div>
-                        <div className='border border-black'>
-                            <h1>Dolares</h1>
-                            <h1>{categoriesDicc.Dolares}</h1>
-                        </div>
-                        <div className='border border-black'>
-                            <h1>Banco</h1>
-                            <h1>{categoriesDicc.Banco}</h1>
-                        </div>
-                        <div className='border border-black'>
-                            <h1>Mercado Pago</h1>
-                            <h1>{categoriesDicc.MercadoPago}</h1>
+                <div className='grid grid-cols-3 gap-4 content-center'>
+                    {/* Caja */}
+                    <div className='col-span-2'>
+                        <h1>Caja</h1>
+                        <div className='grid grid-cols-4'>
+                            <div className='border border-black'>
+                                <h1 className='font-bold'>Pesos</h1>
+                                <h1>{categoriesDicc.Pesos}</h1>
+                            </div>
+                            <div className='border border-black'>
+                                <h1 className='font-bold'>Dolares</h1>
+                                <h1>{categoriesDicc.Dolares}</h1>
+                            </div>
+                            <div className='border border-black'>
+                                <h1 className='font-bold'>Banco</h1>
+                                <h1>{categoriesDicc.Banco}</h1>
+                            </div>
+                            <div className='border border-black'>
+                                <h1 className='font-bold'>Mercado Pago</h1>
+                                <h1>{categoriesDicc.MercadoPago}</h1>
+                            </div>
                         </div>
                     </div>
-                </div>
-                {/* Ganancia */}
-                <div>
-                    <div className='grid grid-cols-4'>
-                        <div className='border border-black'>
-                            <h1>Ganancia</h1>
-                            <h1>Ventas + Reparaciones - Costo Mercaderia Vendida (CMV) </h1>
-                            <h1>{(-Number(categoriesDicc.CMV)*dolar) - Number(categoriesDicc.Venta) - Number(categoriesDicc.Reparaciones)}</h1>
+                    {/* Ganancia */}
+                    <div>
+                        <div>
+                            <div className='border border-black'>
+                                <h1 className='font-bold'>Ganancia</h1>
+                                <h1>Ventas + Reparaciones - Costo Mercaderia Vendida (CMV) </h1>
+                                <h1>{(-Number(categoriesDicc.CMV)*dolar) - Number(categoriesDicc.Venta) - Number(categoriesDicc.Reparaciones)}</h1>
+                            </div>
                         </div>
                     </div>
-                </div>
-                {/* Repuestos */}
-                <div>
-                    <div className='grid grid-cols-4'>
-                        <div className='border border-black'>
-                            <h1>Repuestos (USD)</h1>
-                            <h1>{categoriesDicc.Repuestos}</h1>
+                    {/* Repuestos */}
+                    <div>
+                        <div>
+                            <div className='border border-black'>
+                                <h1 className='font-bold'>Repuestos (USD)</h1>
+                                <h1>{categoriesDicc.Repuestos}</h1>
+                            </div>
+                        </div>
+                    </div>
+                    {/* Costos Fijos */}
+                    <div>
+                        <h1>Costos Fijos</h1>
+                        <div className='grid grid-cols-3'>
+                            <div className='border border-black'>
+                                <h1 className='font-bold'>PcKing</h1>
+                                <h1>{categoriesDicc.PcKing}</h1>
+                            </div>
+                            <div className='border border-black'>
+                                <h1 className='font-bold'>Obelisco</h1>
+                                <h1>{categoriesDicc.Obelisco}</h1>
+                            </div>
+                            <div className='border border-black'>
+                                <h1 className='font-bold'>Publicidad</h1>
+                                <h1>{categoriesDicc.Publicidad}</h1>
+                            </div>
+                            <div className='border border-black'>
+                                <h1 className='font-bold'>Alquiler</h1>
+                                <h1>{categoriesDicc.Alquiler}</h1>
+                            </div>
+                            <div className='border border-black'>
+                                <h1 className='font-bold'>Sueldos</h1>
+                                <h1>{categoriesDicc.Sueldos}</h1>
+                            </div>
+                            <div className='border border-black'>
+                                <h1 className='font-bold'>Encargado</h1>
+                                <h1>{categoriesDicc.Encargado}</h1>
+                            </div>
+                        </div>
+                    </div>
+                    {/* Varios */}
+                    <div>
+                        <h1>Varios</h1>
+                        <div className='grid grid-cols-3'>
+                            <div className='border border-black'>
+                                <h1 className='font-bold'>Varios</h1>
+                                <h1>{categoriesDicc.Varios}</h1>
+                            </div>
+                            <div className='border border-black'>
+                                <h1 className='font-bold'>Garantias</h1>
+                                <h1>{categoriesDicc.Garantia}</h1>
+                            </div>
+                            <div className='border border-black'>
+                                <h1 className='font-bold'>Comida</h1>
+                                <h1>{categoriesDicc.Comida}</h1>
+                            </div>
                         </div>
                     </div>
                 </div>
