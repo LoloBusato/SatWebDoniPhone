@@ -54,8 +54,6 @@ function Statistics() {
           const startDate = fechaInicioSearch ? new Date(`${start[1]}-${start[0]}-${start[2]}`) : null;
           const end = fechaFinSearch.split("/")
           const endDate = fechaFinSearch ? new Date(`${end[1]}-${end[0]}-${end[2]}`) : null;
-          console.log(createdAt, startDate, endDate)
-
           
           const montoMin = montoMinSearch ? Number(montoMinSearch) : 0;
           const montoMax = montoMaxSearch ? Number(montoMaxSearch) : 100000000;

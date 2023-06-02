@@ -45,6 +45,7 @@ import MovesBranches from './routes/finances/movesBranches';
 import MovesOthers from './routes/finances/movesOthers';
 import MovesRepairs from './routes/finances/movesRepairs';
 import MovCategories from './routes/finances/movcategories';
+import Resumen from './routes/statistics/Resumen';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -101,6 +102,7 @@ const router = createBrowserRouter(
         
         {/* Rutas para estadisticas */}
         <Route path= '/librocontable' element= {<LibroContable /> } /> 
+        <Route path= '/resumen' element= {<Resumen /> } /> 
 
         {/* Rutas para gastos */}
         <Route path= '/movements' element= {<Movements /> } />
