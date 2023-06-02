@@ -5,12 +5,20 @@ import MainNavBar from '../orders/MainNavBar';
 
 function Statistics() {
 
-    const [movements, setMovements] = useState([])
+    const [allMovements, setAllMovements] = useState([])
     const [movname, setMovname] = useState([])
 
-    const [movimientos, setMovimientos] = useState([]);
-    const [movimientoSeleccionado, setMovimientoSeleccionado] = useState(null);
+    const [selectMovements, setSelectMovements] = useState([]);
+    const [idSelectMovement, setIdSelectMovement] = useState(null);
 
+    const [searchMovname, setsearchMovname] = useState([]);
+
+    const [ingresoSearch, setIngresoSearch] = useState("");
+    const [egresoSearch, setEgresoSearch] = useState("");
+    const [montoMinSearch, setMontoMinSearch] = useState("");
+    const [montoMaxSearch, setMontoMaxSearch] = useState("");
+    const [fechaInicioSearch, setFechaInicioSearch] = useState("");
+    const [fechaFinSearch, setFechaFinSearch] = useState("");
 
     const navigate = useNavigate();
 
@@ -19,7 +27,7 @@ function Statistics() {
 
             await axios.get(`http://localhost:3001/movements`)
                 .then(response => {
-                    setMovements(response.data)
+                  setAllMovements(response.data)
                 })
                 .catch(error => {
                     console.error(error)
@@ -28,6 +36,7 @@ function Statistics() {
             await axios.get(`http://localhost:3001/movname`)
                 .then(response => {
                     setMovname(response.data)
+                    setsearchMovname(response.data)
                 })
                 .catch(error => {
                     console.error(error)
@@ -36,31 +45,77 @@ function Statistics() {
         fetchStates()
     }, []);
 
-    const obtenerMovimientos = (idMovname) => {
-      // Realiza una consulta a la base de datos utilizando el idMovname seleccionado
-      // y obtén los movimientos relacionados
+    async function handleSearch (event) {
+      event.preventDefault();
+      setsearchMovname(movname.filter((item) => {
+          const fecha = item.fecha.split("/")
+          const createdAt = new Date(`${fecha[1]}-${fecha[0]}-${fecha[2]}`);
+          const start = fechaInicioSearch.split("/")
+          const startDate = fechaInicioSearch ? new Date(`${start[1]}-${start[0]}-${start[2]}`) : null;
+          const end = fechaFinSearch.split("/")
+          const endDate = fechaFinSearch ? new Date(`${end[1]}-${end[0]}-${end[2]}`) : null;
+          console.log(createdAt, startDate, endDate)
+
+          
+          const montoMin = montoMinSearch ? Number(montoMinSearch) : 0;
+          const montoMax = montoMaxSearch ? Number(montoMaxSearch) : 100000000;
+
+          const isWithinRangeMonto = (Number(item.monto) >= montoMin && Number(item.monto) <= montoMax);
+          // Verificar si la fecha está dentro del rango
+          const isWithinRangeDate = (!startDate || createdAt >= startDate) && (!endDate || createdAt <= endDate);
+
+          return (
+              item.ingreso.toLowerCase().includes(ingresoSearch.toLowerCase()) &&
+              item.egreso.toLowerCase().includes(egresoSearch.toLowerCase()) &&
+              isWithinRangeDate &&
+              isWithinRangeMonto
+          )
+      }));
+    };
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const rowsPerPage = 10;
   
-      // En este ejemplo, se filtran los movimientos del array datosMovements
-      const movimientosFiltrados = movements.filter(
-        (movimiento) => movimiento.movname_id === idMovname
+    // Función para realizar la paginación de los datos
+    const paginateData = () => {
+      const startIndex = (currentPage - 1) * rowsPerPage;
+      const endIndex = startIndex + rowsPerPage;
+      return searchMovname.slice(startIndex, endIndex);
+    };
+  
+    // Controlador de evento para avanzar a la siguiente página
+    const nextPage = () => {
+      if (currentPage < Math.ceil(searchMovname.length / rowsPerPage)) {
+        setCurrentPage(currentPage + 1);
+      }
+    };
+  
+    // Controlador de evento para retroceder a la página anterior
+    const prevPage = () => {
+      if (currentPage > 1) {
+        setCurrentPage(currentPage - 1);
+      }
+    };
+
+    const obtenerMovimientos = (id) => {
+      const movimientosFiltrados = allMovements.filter(
+        (movimiento) => movimiento.movname_id === id
       );
-  
-      // Actualiza el estado con los nuevos movimientos obtenidos
-      setMovimientos(movimientosFiltrados);
+        setSelectMovements(movimientosFiltrados);
     };
 
     const handleRowClick = (id) => {
-      if (movimientoSeleccionado === id) {
-        // Si ya se ha seleccionado este movimiento, lo deseleccionamos
-        setMovimientoSeleccionado(null);
-        setMovimientos([]);
+      if (idSelectMovement === id) {
+        setIdSelectMovement(null);
+        setSelectMovements([]);
       } else {
-        // Obtén los movimientos relacionados al id seleccionado
         obtenerMovimientos(id);
-        // Establece el id del movimiento seleccionado
-        setMovimientoSeleccionado(id);
+        setIdSelectMovement(id);
       }
     };
+
+    // Obtener las filas correspondientes a la página actual
+    const paginatedRows = paginateData();
 
     return (
         <div className='bg-gray-300 min-h-screen pb-2'>
@@ -68,6 +123,73 @@ function Statistics() {
             <div className="bg-white my-2 px-2 max-w-7xl mx-auto">
               <div className='text-center'>
                 <h1 className="text-5xl font-bold py-8">Libro contable</h1>
+                <div className="border my-6 border-gray-300">
+                        <form onSubmit={handleSearch} className="p-1 bg-blue-100">
+                            <div className='grid grid-cols-3 gap-y-1'>
+                                <div className='flex justify-end w-5/6 gap-x-2'>
+                                    <label>Ingreso</label>
+                                    <input
+                                        className="text-end w-52"
+                                        type="text"
+                                        value={ingresoSearch}
+                                        onChange={(e) => setIngresoSearch(e.target.value)}
+                                    />
+                                </div>
+                                <div className='flex justify-end w-5/6 gap-x-2'>
+                                    <label>Fecha Inicio </label>
+                                    <input
+                                        className='w-52'
+                                        type="text"
+                                        value={fechaInicioSearch}
+                                        onChange={(e) => setFechaInicioSearch(e.target.value)}
+                                    />
+                                </div>
+                                <div className='flex justify-end w-5/6 gap-x-2'>
+                                    <label>Fecha Fin </label>
+                                    <input
+                                        className='w-52'
+                                        type="text"
+                                        value={fechaFinSearch}
+                                        onChange={(e) => setFechaFinSearch(e.target.value)}
+                                    />
+                                </div>
+                                <div className='flex justify-end w-5/6 gap-x-2'>
+                                    <label>Egreso </label>
+                                    <input
+                                        className='w-52'
+                                        type="text"
+                                        value={egresoSearch}
+                                        onChange={(e) => setEgresoSearch(e.target.value)}
+                                    />
+                                </div>
+                                <div className='flex justify-end w-5/6 gap-x-2'>
+                                    <label>Monto mínimo </label>
+                                    <input
+                                        className='w-52'
+                                        type="text"
+                                        value={montoMinSearch}
+                                        onChange={(e) => setMontoMinSearch(e.target.value)}
+                                    />
+                                </div>        
+                                <div className='flex justify-end w-5/6 gap-x-2'>
+                                    <label>Monto máximo </label>
+                                    <input
+                                        className='w-52'
+                                        type="text"
+                                        value={montoMaxSearch}
+                                        onChange={(e) => setMontoMaxSearch(e.target.value)}
+                                    />
+                                </div>                     
+                            </div>
+                            <div className='flex justify-end'>
+                                <button
+                                    type='submit'
+                                    className="px-1 text-black font-bold bg-white rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-200" >
+                                    Buscar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 <table className="mt-4 w-full">
                   <thead>
                     <tr>
@@ -82,7 +204,7 @@ function Statistics() {
                     </tr>
                   </thead>
                   <tbody className='text-center'>
-                    {movname.map((row) => (
+                    {paginatedRows.map((row) => (
                       <React.Fragment key={row.idmovname}>
                         <tr
                           className="cursor-pointer hover:bg-gray-100 border border-black"
@@ -112,7 +234,7 @@ function Statistics() {
                           </td>
                         </tr>
                         {/* Renderiza la tabla de movimientos si el movimiento está seleccionado */}
-                        {movimientoSeleccionado === row.idmovname && (
+                        {idSelectMovement === row.idmovname && (
                           <tr className='bg-gray-300 border border-black'>
                             <td colSpan="3"></td>
                             <td colSpan="3">
@@ -124,7 +246,7 @@ function Statistics() {
                                   </tr>
                                 </thead>
                                 <tbody className='text-center'>
-                                  {movimientos.map((movimiento) => (
+                                  {selectMovements.map((movimiento) => (
                                     <tr key={movimiento.idmovements}>
                                       <td className="px-4 py-2 border border-black">{movimiento.categories}</td>
                                       <td className="px-4 py-2 border border-black">{movimiento.unidades}</td>
@@ -140,6 +262,17 @@ function Statistics() {
                     ))}
                   </tbody>
                 </table>
+                
+                <div className='flex bg-blue-300 justify-between py-1 px-1'>
+                            <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline"
+                                onClick={prevPage} >
+                                Prev
+                            </button>
+                            <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline"
+                                onClick={nextPage} >
+                                Next
+                            </button>
+                        </div>
               </div>
             </div>
         </div>
