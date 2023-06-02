@@ -36,7 +36,7 @@ import UpdateOrders from './routes/orders/updateOrders';
 import RouteController from './routes/login/RouteController';
 import Repairs from './routes/orders/Repairs';
 import ReasignOrder from './routes/orders/ReasignOrder';
-import Statistics from './routes/statistics/LibroContable';
+import LibroContable from './routes/statistics/LibroContable';
 import UpdateUser from './routes/login/UpdateUser';
 import PrintOrder from './routes/orders/PrintOrder';
 import Movements from './routes/finances/movements';
@@ -100,7 +100,7 @@ const router = createBrowserRouter(
         <Route path= '/updateBranches/:id' element= {<UpdateBranch /> } /> 
         
         {/* Rutas para estadisticas */}
-        <Route path= '/statistics' element= {<Statistics /> } /> 
+        <Route path= '/librocontable' element= {<LibroContable /> } /> 
 
         {/* Rutas para gastos */}
         <Route path= '/movements' element= {<Movements /> } />
