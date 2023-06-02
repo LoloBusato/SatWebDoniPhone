@@ -11,6 +11,8 @@ function Resumen() {
     const [fechaInicioSearch, setFechaInicioSearch] = useState("");
     const [fechaFinSearch, setFechaFinSearch] = useState("");
 
+    const [dolar, setDolar] = useState(500)
+
     useEffect(() => {
         const fetchStates = async () => {
             await axios.get(`http://localhost:3001/movements`)
@@ -20,6 +22,14 @@ function Resumen() {
                 .catch(error => {
                     console.error(error)
                 })
+                
+            await axios.get(`https://api.bluelytics.com.ar/v2/latest`)
+            .then(response => {
+                setDolar(response.data.blue.value_sell)
+            })
+            .catch(error => {
+                console.error(error)
+            })
 
             await axios.get(`http://localhost:3001/movname`)
                 .then(response => {
@@ -119,24 +129,44 @@ function Resumen() {
                         </div>
                     ))}
                 </div>
+                {/* Caja */}
                 <div>
                     <h1>Caja</h1>
-                    <div className='flex'>
-                        <div>
+                    <div className='grid grid-cols-4'>
+                        <div className='border border-black'>
                             <h1>Pesos</h1>
                             <h1>{categoriesDicc.Pesos}</h1>
                         </div>
-                        <div>
+                        <div className='border border-black'>
                             <h1>Dolares</h1>
                             <h1>{categoriesDicc.Dolares}</h1>
                         </div>
-                        <div>
+                        <div className='border border-black'>
                             <h1>Banco</h1>
                             <h1>{categoriesDicc.Banco}</h1>
                         </div>
-                        <div>
+                        <div className='border border-black'>
                             <h1>Mercado Pago</h1>
                             <h1>{categoriesDicc.MercadoPago}</h1>
+                        </div>
+                    </div>
+                </div>
+                {/* Ganancia */}
+                <div>
+                    <div className='grid grid-cols-4'>
+                        <div className='border border-black'>
+                            <h1>Ganancia</h1>
+                            <h1>Ventas + Reparaciones - Costo Mercaderia Vendida (CMV) </h1>
+                            <h1>{(-Number(categoriesDicc.CMV)*dolar) - Number(categoriesDicc.Venta) - Number(categoriesDicc.Reparaciones)}</h1>
+                        </div>
+                    </div>
+                </div>
+                {/* Repuestos */}
+                <div>
+                    <div className='grid grid-cols-4'>
+                        <div className='border border-black'>
+                            <h1>Repuestos (USD)</h1>
+                            <h1>{categoriesDicc.Repuestos}</h1>
                         </div>
                     </div>
                 </div>
