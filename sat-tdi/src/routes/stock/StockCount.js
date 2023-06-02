@@ -59,9 +59,7 @@ function StockCount() {
     <div className='bg-gray-300 min-h-screen pb-2'>
         <MainNavBar />
         <div className='bg-white m-2 py-8 px-2'>
-            <div className="flex justify-between">
-                <h1><span className="text-2xl font-bold">Productos en Stock</span></h1>
-            </div>
+            <h1 className="text-2xl font-bold text-center">Productos en Stock</h1>
             <div className="border my-6 border-gray-300">
                 <form onSubmit={handleSearch} className="p-1 bg-blue-100">
                     <div className='grid grid-cols-3 gap-y-1  justify-items-center'>
