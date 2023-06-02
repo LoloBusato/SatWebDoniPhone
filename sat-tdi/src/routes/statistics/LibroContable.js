@@ -123,7 +123,7 @@ function Statistics() {
             <div className="bg-white my-2 px-2 max-w-7xl mx-auto">
               <div className='text-center'>
                 <h1 className="text-5xl font-bold py-8">Libro contable</h1>
-                <div className="border my-6 border-gray-300">
+                <div className="border border-gray-300">
                         <form onSubmit={handleSearch} className="p-1 bg-blue-100">
                             <div className='grid grid-cols-3 gap-y-1'>
                                 <div className='flex justify-end w-5/6 gap-x-2'>

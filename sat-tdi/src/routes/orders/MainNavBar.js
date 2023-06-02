@@ -7,6 +7,7 @@ const MainNavBar = () => {
     const [expandedConfig, setExpandedConfig] = useState(false);
     const [expandedModif, setExpandedModif] = useState(false);
     const [expandedStock, setExpandedStock] = useState(false);
+    const [expandedRegistro, setExpandedRegistro] = useState(false);
 
     const handleMouseEnter = (type) => {
         if (type === "config") {
@@ -15,6 +16,8 @@ const MainNavBar = () => {
             setExpandedModif(true)
         } else if (type === "stock") {
             setExpandedStock(true)
+        } else if (type === "registro") {
+            setExpandedRegistro(true)
         }
     };
 
@@ -25,8 +28,10 @@ const MainNavBar = () => {
             setExpandedModif(false)
         } else if (type === "stock") {
             setExpandedStock(false)
+        } else if (type === "registro") {
+            setExpandedRegistro(false)
         }
-    };
+    }; 
 
     return (
         <nav className="bg-gray-700 " >
@@ -58,7 +63,16 @@ const MainNavBar = () => {
                             <Link to='/supplier'><li className='border-t'>Proveedores</li></Link>
                         </ul>
                     </li>
-                    <Link to="/statistics" className="text-white font-bold text-lg hover:text-gray-300 px-4 border-r-2 w-full" ><li>Estadisticas</li></Link>
+                    <li className="relative text-white font-bold text-lg hover:text-gray-300 px-4 border-r-2 w-full"
+                        onMouseEnter={() => handleMouseEnter("registro")}
+                        onMouseLeave={() => handleMouseLeave("registro")}
+                    >
+                        Registros 
+                        <ul className={`w-full absolute bg-gray-700 text-white left-0 ${expandedRegistro ? 'block' : 'hidden'}`}>
+                            <Link to='/librocontable'><li className='border-t'>Libro Contable</li></Link>
+                            <Link to='/stock'><li className='border-t'>Resumen financiero</li></Link>
+                        </ul>
+                    </li>
                     <Link to="/movements" className="text-white font-bold text-lg hover:text-gray-300 px-4 border-r-2 w-full" ><li>Gastos</li></Link>
                     <li className="relative text-white font-bold text-lg hover:text-gray-300 px-4 border-r-2 w-full"
                         onMouseEnter={() => handleMouseEnter("config")}
