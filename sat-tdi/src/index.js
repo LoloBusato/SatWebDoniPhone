@@ -104,7 +104,7 @@ const router = createBrowserRouter(
 
         {/* Rutas para gastos */}
         <Route path= '/movements' element= {<Movements /> } />
-        <Route path= '/movecategories' element= {<MovCategories /> } />
+        <Route path= '/movescategories' element= {<MovCategories /> } />
         <Route path= '/movessells' element= {<MovesSells /> } /> 
         <Route path= '/movesbranches' element= {<MovesBranches /> } /> 
         <Route path= '/movesothers' element= {<MovesOthers /> } /> 

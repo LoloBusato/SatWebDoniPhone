@@ -35,7 +35,7 @@ router.post('/', async (req, res) => {
   });
   // read
   router.get("/", (req, res) => {
-    const qgetMovements = "SELECT * FROM movements";
+    const qgetMovements = "SELECT idmovname, ingreso, egreso, operacion, monto, fecha, username FROM satweb.movname JOIN users ON userId = idusers ORDER BY str_to_date(fecha, '%d/%m/%y') DESC;";
     db.query(qgetMovements, (err, data) => {
       if (err) {
         console.log(err);

@@ -25,7 +25,7 @@ router.post('/', async (req, res) => {
 });
   // read
   router.get("/", (req, res) => {
-    const qgetMovements = "SELECT * FROM movements";
+    const qgetMovements = "SELECT idmovements, movname_id, unidades, categories FROM satweb.movements JOIN movcategories ON movcategories_id = idmovcategories;";
     db.query(qgetMovements, (err, data) => {
       if (err) {
         console.log(err);

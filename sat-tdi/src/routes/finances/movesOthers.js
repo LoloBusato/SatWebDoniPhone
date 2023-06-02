@@ -144,6 +144,11 @@ function MovesOthers() {
             alert(error.response.data);
         }
     }
+    
+    async function handleNewCategory(event) {
+        event.preventDefault();
+        
+    }
 
     return (
         <div className='bg-gray-300 min-h-screen pb-2'>
@@ -165,13 +170,17 @@ function MovesOthers() {
                                     </select>
                                 </div>
                                 <div className='w-full'>
-                                    <label className="block text-gray-700 font-bold mb-2">Categoria: *</label>
+                                    <label className="block text-gray-700 font-bold mb-2">Categorias: *</label>
                                     <select name="other" id="other" defaultValue={""} className='w-full shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline' >
                                         <option value="" disabled>Categoria</option>
                                         {otherCategories.map((category) => (
                                             <option key={category.idmovcategories} value={JSON.stringify(category)}>{category.categories}</option>
                                         ))}
                                     </select>
+                                    <button
+                                    onClick={handleNewCategory}>
+                                        Agregar categoria
+                                    </button>
                                 </div>
                                 <div className='w-full'>
                                     <label className="block text-gray-700 font-bold mb-2">Gasto: *</label>

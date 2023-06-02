@@ -7,22 +7,8 @@ function MovCategories() {
     const [branch, setBranch] = useState('');
     const [contact, setContact] = useState('');
     const [info, setInfo] = useState('');
-    const [listBranches, setListBranches] = useState([])
 
     const navigate = useNavigate();
-
-    useEffect(() => {
-        const fetchStates = async () => {
-            await axios.get('http://localhost:3001/branches')
-                .then(response => {
-                    setListBranches(response.data)
-                })
-                .catch(error => {
-                    console.error(error)
-                })
-        }
-        fetchStates()
-    }, []);
 
     async function handleSubmit(event) {
         event.preventDefault();
@@ -63,29 +49,7 @@ function MovCategories() {
                                         value={branch} 
                                         onChange={(e) => setBranch(e.target.value)}
                                     />
-                                </div>
-                                <div className='w-full'>
-                                    <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Contacto: *</label>
-                                    <input 
-                                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                                        type="text" 
-                                        id="contact" 
-                                        placeholder="11-6528-8853 - doniphoneinc@gmail.com"
-                                        value={contact} 
-                                        onChange={(e) => setContact(e.target.value)}
-                                    />
-                                </div>
-                                <div className='w-full'>
-                                    <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Ubicación: *</label>
-                                    <textarea 
-                                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                                        type="text" 
-                                        id="info" 
-                                        placeholder="14 de Julio 1454 - Belgrano, Capital Federal - Ciudad Autónoma de Buenos Aires"
-                                        value={info} 
-                                        onChange={(e) => setInfo(e.target.value)}
-                                    />
-                                </div>                                
+                                </div>                            
                             </div>
                         </div>
                         <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
@@ -97,32 +61,6 @@ function MovCategories() {
                                 Volver
                         </button>
                     </form>
-                </div>
-                <div className="flex justify-center mb-10">
-                    <table className="table-auto">
-                        <thead>
-                            <tr>
-                                <th className="px-4 py-2">Sucursal</th>
-                                <th className="px-4 py-2">Contacto</th>
-                                <th className="px-4 py-2">Ubicación</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {listBranches.map((branch) => (
-                                <tr key={branch.idbranches}>
-                                    <td className="border px-4 py-2" value={branch.branch}>{branch.branch}</td>
-                                    <td className="border px-4 py-2" value={branch.contact}>{branch.contact}</td>
-                                    <td className="border px-4 py-2" value={branch.info}>{branch.info}</td>
-                                    <td>
-                                        <button className="bg-green-500 hover:bg-green-700 border px-4 py-2 color"
-                                        onClick={() => { navigate(`/updateBranches/${branch.idbranches}`) }} >
-                                        Editar
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
