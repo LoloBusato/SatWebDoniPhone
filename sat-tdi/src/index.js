@@ -44,6 +44,7 @@ import MovesSells from './routes/finances/movesSells';
 import MovesBranches from './routes/finances/movesBranches';
 import MovesOthers from './routes/finances/movesOthers';
 import MovesRepairs from './routes/finances/movesRepairs';
+import MovCategories from './routes/finances/movcategories';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -103,6 +104,7 @@ const router = createBrowserRouter(
 
         {/* Rutas para gastos */}
         <Route path= '/movements' element= {<Movements /> } />
+        <Route path= '/movecategories' element= {<MovCategories /> } />
         <Route path= '/movessells' element= {<MovesSells /> } /> 
         <Route path= '/movesbranches' element= {<MovesBranches /> } /> 
         <Route path= '/movesothers' element= {<MovesOthers /> } /> 
