@@ -50,17 +50,13 @@ function Statistics() {
       setsearchMovname(movname.filter((item) => {
           const fecha = item.fecha.split("/")
           const createdAt = new Date(`${fecha[1]}-${fecha[0]}-${fecha[2]}`);
-          const start = fechaInicioSearch.split("/")
-          const startDate = fechaInicioSearch ? new Date(`${start[1]}-${start[0]}-${start[2]}`) : null;
-          const end = fechaFinSearch.split("/")
-          const endDate = fechaFinSearch ? new Date(`${end[1]}-${end[0]}-${end[2]}`) : null;
           
           const montoMin = montoMinSearch ? Number(montoMinSearch) : 0;
           const montoMax = montoMaxSearch ? Number(montoMaxSearch) : 100000000;
 
           const isWithinRangeMonto = (Number(item.monto) >= montoMin && Number(item.monto) <= montoMax);
           // Verificar si la fecha está dentro del rango
-          const isWithinRangeDate = (!startDate || createdAt >= startDate) && (!endDate || createdAt <= endDate);
+          const isWithinRangeDate = (!fechaInicioSearch || createdAt >= new Date(fechaInicioSearch)) && (!fechaFinSearch || createdAt <= new Date(fechaFinSearch));
 
           return (
               item.ingreso.toLowerCase().includes(ingresoSearch.toLowerCase()) &&
@@ -137,7 +133,7 @@ function Statistics() {
                                     <label>Fecha Inicio </label>
                                     <input
                                         className='w-52'
-                                        type="text"
+                                        type="date"
                                         value={fechaInicioSearch}
                                         onChange={(e) => setFechaInicioSearch(e.target.value)}
                                     />
@@ -146,7 +142,7 @@ function Statistics() {
                                     <label>Fecha Fin </label>
                                     <input
                                         className='w-52'
-                                        type="text"
+                                        type="date"
                                         value={fechaFinSearch}
                                         onChange={(e) => setFechaFinSearch(e.target.value)}
                                     />
