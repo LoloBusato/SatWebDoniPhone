@@ -5,6 +5,9 @@ import MainNavBar from './MainNavBar';
 import SERVER from '../server'
 
 function Repairs() {
+    const [ordersInProgress, setOrdersInProgress] = useState([])
+    const [ordersFinished, setOrdersFinished] = useState([])
+
     const [listOrders, setListOrders] = useState([])
     const [searchOrder, setsearchOrder] = useState([]);
 
@@ -14,9 +17,13 @@ function Repairs() {
     const [fechaInicioSearch, setFechaInicioSearch] = useState("");
     const [fechaFinSearch, setFechaFinSearch] = useState("");
 
-    const [users, setUsers] = useState([])
+    const [grupoUsuarios, setGrupoUsuarios] = useState([])
     const [estados, setStates] = useState([])
     const [branches, setBranches] = useState([])
+
+    const [checkOrder, setCheckOrder] = useState(true)
+
+    const permisos = JSON.stringify(localStorage.getItem("permisos"))
 
     const navigate = useNavigate();
 
@@ -24,14 +31,21 @@ function Repairs() {
         const fetchStates = async () => {
             await axios.get(`${SERVER}/orders`)
                 .then(response => {
-                    console.log(response.data)
+                    setOrdersInProgress(response.data)
                     setListOrders(response.data)
                     setsearchOrder(response.data)
                 })
                 .catch(error => {
                     console.error(error)
                 })
-                await axios.get(`${SERVER}/states`)
+                await axios.get(`${SERVER}/orders/entregados`)
+                .then(response => {
+                    setOrdersFinished(response.data)
+                })
+                .catch(error => {
+                    console.error(error)
+                })
+            await axios.get(`${SERVER}/states`)
                 .then(response => {
                     setStates(response.data);
                 })
@@ -39,9 +53,9 @@ function Repairs() {
                     console.error(error);
                 });
 
-            await axios.get(`${SERVER}/users`)
+            await axios.get(`${SERVER}/grupousuarios`)
                 .then(response => {
-                    setUsers(response.data);
+                    setGrupoUsuarios(response.data);
                 })
                 .catch(error => {
                     console.error(error);
@@ -82,9 +96,9 @@ function Repairs() {
                 isWithinRange
             )
         }));
-      };
+    };
 
-      const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1);
     const rowsPerPage = 50;
   
     // Función para realizar la paginación de los datos
@@ -111,16 +125,30 @@ function Repairs() {
     // Obtener las filas correspondientes a la página actual
     const paginatedRows = paginateData();
 
+    const handleClick = () => {
+        if (checkOrder) {
+            setCheckOrder(!checkOrder)
+            setListOrders(ordersFinished)
+            setsearchOrder(ordersFinished)
+          } else {
+            setCheckOrder(!checkOrder)
+            setListOrders(ordersInProgress)
+            setsearchOrder(ordersInProgress)
+          }
+    }
+
     return (
         <div className='bg-gray-300 min-h-screen'>
             <MainNavBar />
             <div className='bg-white m-2 py-8 px-2 w-full md:w-5/6 mx-auto'>
                 <div className="flex justify-between">
                     <h1><span className="text-2xl font-bold">Reparaciones</span> (se encontraron <span className='font-bold'>{searchOrder.length}</span> ordenes)</h1>
-                    <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline"
-                        onClick={() => { navigate(`/orders`) }} >
-                        Agregar orden
-                    </button>
+                    {permisos.includes("ManipularOrdenes") && (
+                        <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline"
+                            onClick={() => { navigate(`/orders`) }} >
+                            Agregar orden
+                        </button>
+                    )}
                 </div>
                 <div>
                     <div className="border my-6 border-gray-300">
@@ -193,11 +221,17 @@ function Repairs() {
                                     <label>Asignada a </label>
                                     <select name="user" id="user" className='w-52' >
                                         <option value="" selected>Asignar orden</option>
-                                        {users.map((user) => (
-                                            <option key={user.idusers} value={user.username}>{user.username}</option>
+                                        {grupoUsuarios.map((grupo) => (
+                                            <option key={grupo.idgrupousuarios} value={grupo.grupo}>{grupo.grupo}</option>
                                         ))}
                                     </select>
-                                </div>                                
+                                </div>   
+                                <div className='flex justify-end w-5/6 gap-x-2'>
+                                    <input 
+                                    type='checkbox'
+                                    onClick={handleClick} />
+                                    <label>Entregados</label>
+                                </div>                             
                             </div>
                             <div className='flex justify-end'>
                                 <button

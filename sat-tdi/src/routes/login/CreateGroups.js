@@ -5,17 +5,16 @@ import MainNavBar from '../orders/MainNavBar';
 import SERVER from '../server'
 
 function CreateGroups() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [listUsers, setListUsers] = useState([])
+    const [grupo, setGrupo] = useState('');
+    const [listGrupos, setListGrupos] = useState([])
 
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchStates = async () => {
-            await axios.get(`${SERVER}/users`)
+            await axios.get(`${SERVER}/grupousuarios`)
                 .then(response => {
-                    setListUsers(response.data)
+                    setListGrupos(response.data)
                 })
                 .catch(error => {
                     console.error(error)
@@ -28,19 +27,39 @@ function CreateGroups() {
         event.preventDefault();
         // Aquí es donde enviarías la información de inicio de sesión al servidor
         try {
-            const response = await axios.post(`${SERVER}/users`, {
-            username,
-            password
+            let checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            const labels = [];
+            
+            checkboxes.forEach(function(checkbox) {
+                let label = document.querySelector('label[for="' + checkbox.id + '"]');
+                labels.push(label.innerText);
+            });
+              
+            const permisos = labels.join(" ");
+            const response = await axios.post(`${SERVER}/grupousuarios`, {
+            grupo,
+            permisos
             });
             if (response.status === 200){
-            alert("Usuario agregado")
-            window.location.reload();
-            // navigate('/home')
+                alert("Grupo de usuarios agregado")
+                window.location.reload();
             }
         } catch (error) {
             alert(error.response.data);
         }
     }
+
+    const eliminarElemento = async (id) => {
+        try {        
+            const response = await axios.delete(`${SERVER}/grupousuarios/${id}`)
+            if (response.status === 200){
+                alert("Grupo de usuarios eliminado")
+                window.location.reload();
+            }
+        } catch (error) {
+            console.error(error)
+        }
+      }
   
     return (
         <div className='bg-gray-300 min-h-screen pb-2'>
@@ -50,26 +69,50 @@ function CreateGroups() {
                 <div className="p-4 max-w-lg mx-auto">
                     <form onSubmit={handleSubmit} className="mb-4">
                         <div className="mb-2">
-                            <div className='flex'>
+                            <div className='flex flex-col'>
                                 <div className='w-full'>
-                                    <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Username: *</label>
+                                    <label className="block text-gray-700 font-bold mb-2">Grupo: *</label>
                                     <input 
                                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
                                         type="text" 
-                                        id="username" 
-                                        value={username} 
-                                        onChange={(e) => setUsername(e.target.value)}
+                                        id="grupo" 
+                                        value={grupo} 
+                                        onChange={(e) => setGrupo(e.target.value)}
                                     />
                                 </div>
-                                <div className='w-full'>
-                                    <label className="block text-gray-700 font-bold mb-2" htmlFor="name">Contraseña: *</label>
-                                    <input 
-                                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-                                        type="text" 
-                                        id="password" 
-                                        value={password} 
-                                        onChange={(e) => setPassword(e.target.value)}
-                                    />
+                                <div>
+                                    <h1 className="block text-gray-700 font-bold mb-2">Permisos: *</h1>
+                                    <div className='flex flex-wrap'>
+                                        <div className='w-1/2'>
+                                            <input type="checkbox" id="checkbox1" name="checkbox1" className='mr-1' />
+                                            <label htmlFor="checkbox1">ManipularOrdenes</label>
+                                        </div>
+
+                                        <div className='w-1/2'>
+                                            <input type="checkbox" id="checkbox2" name="checkbox2" className='mr-1' />
+                                            <label htmlFor="checkbox2">Contabilidad</label>
+                                        </div>
+
+                                        <div className='w-1/2'>
+                                            <input type="checkbox" id="checkbox3" name="checkbox3" className='mr-1' />
+                                            <label htmlFor="checkbox3">ManipularStock</label>
+                                        </div>
+
+                                        <div className='w-1/2'>
+                                            <input type="checkbox" id="checkbox4" name="checkbox4" className='mr-1' />
+                                            <label htmlFor="checkbox4">AsignarRepuestos</label>
+                                        </div>
+
+                                        <div className='w-1/2'>
+                                            <input type="checkbox" id="checkbox5" name="checkbox5" className='mr-1' />
+                                            <label htmlFor="checkbox5">Administrador</label>
+                                        </div>
+
+                                        <div className='w-1/2'>
+                                            <input type="checkbox" id="checkbox6" name="checkbox6" className='mr-1' />
+                                            <label htmlFor="checkbox6">VerTodasLasOrdenes</label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -87,19 +130,25 @@ function CreateGroups() {
                     <table className="table-auto">
                         <thead>
                             <tr>
-                                <th className="px-4 py-2">Usuario</th>
-                                <th className="px-4 py-2">Contraseña</th>
+                                <th className="px-4 py-2">Grupo</th>
+                                <th className="px-4 py-2">Permisos</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {listUsers.map((user) => (
-                                <tr key={user.idusers}>
-                                    <td className="border px-4 py-2" value={user.username}>{user.username}</td>
-                                    <td className="border px-4 py-2" value={user.password}>{user.password}</td>
+                            {listGrupos.map((grupo) => (
+                                <tr key={grupo.idgrupousuarios}>
+                                    <td className="border px-4 py-2" value={grupo.grupo}>{grupo.grupo}</td>
+                                    <td className="border px-4 py-2" value={grupo.permisos}>{grupo.permisos}</td>
                                     <td>
                                         <button className="bg-green-500 hover:bg-green-700 border px-4 py-2 color"
-                                        onClick={() => { navigate(`/updateUser/${user.idusers}`) }} >
+                                        onClick={() => { navigate(`/updateUser/${grupo.idgrupousuarios}`) }} >
                                         Editar
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button className="bg-red-500 hover:bg-red-700 border px-4 py-2 color"
+                                        onClick={() => { eliminarElemento(grupo.idgrupousuarios)}} >
+                                        Eliminar
                                         </button>
                                     </td>
                                 </tr>

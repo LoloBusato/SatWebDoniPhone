@@ -6,11 +6,11 @@ const db = require('../database/dbConfig');
 // CRUD de usuarios
 // create
 router.post("/", (req, res) => {
-  const { username, password } = req.body;
+  const { username, password, branchId, grupoId } = req.body;
 
   const qexist = 'SELECT * FROM users WHERE username = ?'
-  const values = [username, password]
-  const qcreate = 'INSERT INTO users (username, password) VALUES (?, ?)'
+  const values = [username, password, branchId, grupoId]
+  const qcreate = 'INSERT INTO users (username, password, branch_id, grupo_id) VALUES (?, ?, ?, ?)'
 
   db.query(qexist, [username], (err, data) => {
     if (err) {
@@ -32,7 +32,7 @@ router.post("/", (req, res) => {
 })
 // read
 router.get("/", (req, res) => {
-  const qgetUsers = "SELECT * FROM users";
+  const qgetUsers = "SELECT * FROM users JOIN branches ON users.branch_id = branches.idbranches JOIN grupousuarios ON users.grupos_id = grupousuarios.idgrupousuarios";
   db.query(qgetUsers, (err, data) => {
     if (err) {
       console.log(err);
